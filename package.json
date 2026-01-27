@@ -1,0 +1,26 @@
+{
+  "name": "baibill",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:api": "npm run start:dev --workspace=apps/api",
+    "dev:frontend": "npm run dev --workspace=apps/frontend",
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:frontend\"",
+    "build:api": "npm run build --workspace=apps/api",
+    "build:frontend": "npm run build --workspace=apps/frontend",
+    "build": "npm run build:api && npm run build:frontend",
+    "test:api": "npm run test --workspace=apps/api",
+    "lint": "npm run lint --workspaces --if-present"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "npm": ">=10.0.0",
+    "node": ">=20.0.0"
+  }
+}

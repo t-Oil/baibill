@@ -1,0 +1,22 @@
+node_modules/
+dist/
+.next/
+.env
+.env.local
+*.log
+tmp/
+uploads/
+.DS_Store
+coverage/
+.turbo
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Docker
+nginx/ssl/*.pem
+nginx/ssl/*.key
+nginx/ssl/*.crt
+!nginx/ssl/README.md
