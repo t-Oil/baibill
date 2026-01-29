@@ -11,7 +11,7 @@ import { RegisterRequest } from '@modules/auth/requests/register.request';
 @Public()
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @Post('login')
   @UseResources(LoginResource)

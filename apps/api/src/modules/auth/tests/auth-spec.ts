@@ -70,7 +70,9 @@ describe('AuthService - login', () => {
     const mockToken: IGenerateToken = { accessToken: 'access', refreshToken: 'refresh' };
 
     jest.spyOn(userRepository, 'findOneWithActive').mockResolvedValue(mockUser);
-    jest.spyOn(oauthRepository, 'store').mockResolvedValue({ token: 'token', refreshToken: 'refresh' } as OauthEntity);
+    jest
+      .spyOn(oauthRepository, 'store')
+      .mockResolvedValue({ token: 'token', refreshToken: 'refresh' } as OauthEntity);
     jest.spyOn(jwtService, 'sign').mockReturnValueOnce('access').mockReturnValueOnce('refresh');
 
     const result = await authService.login(payload);

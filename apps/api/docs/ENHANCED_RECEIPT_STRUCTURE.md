@@ -9,6 +9,7 @@
 ## Overview
 
 The receipt structure has been enhanced to capture comprehensive receipt information including:
+
 - Company tax ID and address
 - Separate fields for subtotal, VAT, and total
 - Currency support (THB, USD, EUR, etc.)
@@ -20,38 +21,38 @@ The receipt structure has been enhanced to capture comprehensive receipt informa
 
 ### Updated `receipts` Table
 
-| Column | Type | Description |
-|--------|------|-------------|
-| `id` | int | Primary key (auto-increment) |
-| `uid` | uuid | Public UUID identifier |
-| `merchant_name` | varchar(255) | Store/business name |
-| **`company_tax_id`** | varchar(100) | Tax ID / VAT number (NEW) |
-| **`company_address`** | text | Business address (NEW) |
-| **`subtotal`** | decimal(10,2) | Amount before tax (NEW) |
-| **`vat_amount`** | decimal(10,2) | Tax/VAT amount (NEW) |
-| `total_amount` | decimal(10,2) | Final total amount |
-| **`currency`** | varchar(10) | Currency code (NEW, default: THB) |
-| `receipt_date` | date | Transaction date |
-| `raw_ocr_text` | text | Full OCR output |
-| `image_url` | varchar(500) | Receipt image filename |
-| `created_at` | timestamp | Creation timestamp |
-| `updated_at` | timestamp | Last update timestamp |
-| `deleted_at` | timestamp | Soft delete timestamp |
-| `is_active` | enum | active/inactive status |
+| Column                | Type          | Description                       |
+| --------------------- | ------------- | --------------------------------- |
+| `id`                  | int           | Primary key (auto-increment)      |
+| `uid`                 | uuid          | Public UUID identifier            |
+| `merchant_name`       | varchar(255)  | Store/business name               |
+| **`company_tax_id`**  | varchar(100)  | Tax ID / VAT number (NEW)         |
+| **`company_address`** | text          | Business address (NEW)            |
+| **`subtotal`**        | decimal(10,2) | Amount before tax (NEW)           |
+| **`vat_amount`**      | decimal(10,2) | Tax/VAT amount (NEW)              |
+| `total_amount`        | decimal(10,2) | Final total amount                |
+| **`currency`**        | varchar(10)   | Currency code (NEW, default: THB) |
+| `receipt_date`        | date          | Transaction date                  |
+| `raw_ocr_text`        | text          | Full OCR output                   |
+| `image_url`           | varchar(500)  | Receipt image filename            |
+| `created_at`          | timestamp     | Creation timestamp                |
+| `updated_at`          | timestamp     | Last update timestamp             |
+| `deleted_at`          | timestamp     | Soft delete timestamp             |
+| `is_active`           | enum          | active/inactive status            |
 
 ### New `receipt_line_items` Table
 
-| Column | Type | Description |
-|--------|------|-------------|
-| `id` | int | Primary key (auto-increment) |
-| `receipt_id` | int | Foreign key to receipts.id (CASCADE) |
-| `description` | varchar(500) | Item name/description |
-| `quantity` | decimal(10,3) | Number of items (default: 1) |
-| `unit_price` | decimal(10,2) | Price per unit |
-| `amount` | decimal(10,2) | Total for this line item |
-| `product_code` | varchar(100) | Product/barcode number (optional) |
-| `created_at` | timestamp | Creation timestamp |
-| `updated_at` | timestamp | Last update timestamp |
+| Column         | Type          | Description                          |
+| -------------- | ------------- | ------------------------------------ |
+| `id`           | int           | Primary key (auto-increment)         |
+| `receipt_id`   | int           | Foreign key to receipts.id (CASCADE) |
+| `description`  | varchar(500)  | Item name/description                |
+| `quantity`     | decimal(10,3) | Number of items (default: 1)         |
+| `unit_price`   | decimal(10,2) | Price per unit                       |
+| `amount`       | decimal(10,2) | Total for this line item             |
+| `product_code` | varchar(100)  | Product/barcode number (optional)    |
+| `created_at`   | timestamp     | Creation timestamp                   |
+| `updated_at`   | timestamp     | Last update timestamp                |
 
 **Foreign Key**: `receipt_id` → `receipts.id` (ON DELETE CASCADE)
 **Index**: `IDX_receipt_line_items_receipt_id` on `receipt_id`
@@ -114,7 +115,7 @@ The OpenAI prompt has been updated to extract all new fields:
     "companyTaxId": "0107567000414",
     "companyAddress": "นวมินทร์ 70",
     "subtotal": 200.15,
-    "vatAmount": 5.10,
+    "vatAmount": 5.1,
     "totalAmount": 205.25,
     "currency": "THB",
     "date": "2026-01-22",
@@ -125,12 +126,12 @@ The OpenAI prompt has been updated to extract all new fields:
         "id": 1,
         "description": "พริกขี้หนูเขียวก้าน ถุงใหญ่",
         "quantity": 0.991,
-        "unitPrice": 79.00,
+        "unitPrice": 79.0,
         "amount": 78.25,
         "productCode": "2111000078253",
         "createdAt": "2026-01-23T08:00:00Z",
         "updatedAt": "2026-01-23T08:00:00Z"
-      },
+      }
       // More line items...
     ],
     "createdAt": "2026-01-23T08:00:00Z",
@@ -195,6 +196,7 @@ npm run migration:revert
 ```
 
 This will:
+
 - Drop the `receipt_line_items` table
 - Remove all new columns from `receipts` table
 - Restore to previous schema
@@ -206,6 +208,7 @@ This will:
 ### 1. Entities
 
 **`receipt.entity.ts`** - Updated with new fields and relationship:
+
 ```typescript
 @Column({ name: 'company_tax_id', type: 'varchar', length: 100, nullable: true })
 companyTaxId?: string;
@@ -230,6 +233,7 @@ lineItems?: ReceiptLineItemEntity[];
 ```
 
 **`receipt-line-item.entity.ts`** - New entity created:
+
 ```typescript
 @Entity('receipt_line_items')
 export class ReceiptLineItemEntity {
@@ -265,6 +269,7 @@ export class ReceiptLineItemEntity {
 ### 2. AI Service
 
 **`ai.service.ts`** - Updated interface:
+
 ```typescript
 export interface AIReceiptLineItem {
   description: string;
@@ -289,6 +294,7 @@ export interface AIReceiptResult {
 ```
 
 **`receipt-parser.prompt.ts`** - Updated to v2.0.0:
+
 - Extracts company tax ID and address
 - Separates subtotal, VAT, and total
 - Captures currency code
@@ -297,6 +303,7 @@ export interface AIReceiptResult {
 ### 3. Receipt Service
 
 **`receipt.service.ts`** - Updated to handle new fields:
+
 ```typescript
 const created = this.receiptRepository.create({
   merchantName: parsed.merchantName,
@@ -328,6 +335,7 @@ if (parsed.lineItems && parsed.lineItems.length > 0) {
 ### 4. DTOs
 
 **`receipt.dto.ts`** - Updated shared interface:
+
 ```typescript
 export interface ReceiptDto {
   uid: string;
@@ -361,21 +369,25 @@ export interface ReceiptLineItemDto {
 ## Use Cases
 
 ### 1. Extract Full Receipt Information
+
 - Company name and tax ID for accounting
 - Separate subtotal and VAT for tax reporting
 - Currency for multi-currency support
 
 ### 2. Itemized Purchase Tracking
+
 - Track individual items purchased
 - Store product codes for inventory matching
 - Calculate quantities and unit prices
 
 ### 3. Expense Management
+
 - Categorize by merchant and date
 - Calculate VAT-exclusive amounts
 - Support international receipts with currency
 
 ### 4. Reporting and Analytics
+
 - Group by merchant or category
 - Aggregate subtotals and VAT
 - Analyze purchase patterns by product
@@ -399,7 +411,7 @@ console.log(receipt.totalAmount); // 205.25
 console.log(receipt.currency); // "THB"
 console.log(receipt.lineItems.length); // 3
 
-receipt.lineItems.forEach(item => {
+receipt.lineItems.forEach((item) => {
   console.log(`${item.quantity} x ${item.description} @ ${item.unitPrice} = ${item.amount}`);
 });
 ```
@@ -441,6 +453,7 @@ ORDER BY r.receipt_date DESC;
 ## Backward Compatibility
 
 ✅ **Fully backward compatible**:
+
 - All new fields are optional or have defaults
 - Existing receipts work without line items
 - Regex parser still works (sets VAT/subtotal to 0)
@@ -497,22 +510,26 @@ SELECT COUNT(*) FROM receipt_line_items WHERE receipt_id = 123; -- Should be 0
 The enhanced receipt structure provides:
 
 ✅ **Comprehensive Data Capture**
+
 - Company information (name, tax ID, address)
 - Detailed financial breakdown (subtotal, VAT, total)
 - Currency support for international receipts
 - Itemized line items with quantities and prices
 
 ✅ **Better Data Organization**
+
 - Normalized schema with separate line items table
 - Foreign key constraints ensure data integrity
 - Indexes for optimal query performance
 
 ✅ **Enhanced AI Parsing**
+
 - OpenAI prompt updated to extract all fields
 - Handles Thai receipts with tax IDs
 - Captures product codes and quantities
 
 ✅ **Backward Compatible**
+
 - Existing code continues to work
 - New fields are optional/have defaults
 - Regex parser still functional

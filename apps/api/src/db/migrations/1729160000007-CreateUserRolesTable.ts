@@ -65,16 +65,12 @@ export class CreateUserRolesTable1729160000007 implements MigrationInterface {
     const table = await queryRunner.getTable('user_roles');
 
     // Drop foreign keys
-    const userForeignKey = table.foreignKeys.find(
-      (fk) => fk.columnNames.indexOf('user_id') !== -1,
-    );
+    const userForeignKey = table.foreignKeys.find((fk) => fk.columnNames.indexOf('user_id') !== -1);
     if (userForeignKey) {
       await queryRunner.dropForeignKey('user_roles', userForeignKey);
     }
 
-    const roleForeignKey = table.foreignKeys.find(
-      (fk) => fk.columnNames.indexOf('role_id') !== -1,
-    );
+    const roleForeignKey = table.foreignKeys.find((fk) => fk.columnNames.indexOf('role_id') !== -1);
     if (roleForeignKey) {
       await queryRunner.dropForeignKey('user_roles', roleForeignKey);
     }

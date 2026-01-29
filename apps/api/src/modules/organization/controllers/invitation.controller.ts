@@ -7,7 +7,7 @@ import { Public } from '@commons/decorators/public.decorator';
  * Request DTO for accepting an invitation.
  */
 class AcceptInvitationRequest {
-    token: string;
+  token: string;
 }
 
 /**
@@ -15,28 +15,25 @@ class AcceptInvitationRequest {
  */
 @Controller('invitations')
 export class InvitationController {
-    constructor(private readonly organizationService: OrganizationService) { }
+  constructor(private readonly organizationService: OrganizationService) {}
 
-    /**
-     * Accepts an invitation using token.
-     * @param body Request body with token
-     * @param req Request object for user info
-     * @returns Created membership
-     */
-    @Post('accept')
-    async acceptInvitation(
-        @Body() body: AcceptInvitationRequest,
-        @Req() req: any,
-    ): Promise<ApiResource> {
-        try {
-            const userId = req.user?.id;
-            const response = await this.organizationService.acceptInvitation(
-                body.token,
-                userId,
-            );
-            return ApiResource.successResponse(response);
-        } catch (error) {
-            return ApiResource.errorResponse(error);
-        }
+  /**
+   * Accepts an invitation using token.
+   * @param body Request body with token
+   * @param req Request object for user info
+   * @returns Created membership
+   */
+  @Post('accept')
+  async acceptInvitation(
+    @Body() body: AcceptInvitationRequest,
+    @Req() req: any,
+  ): Promise<ApiResource> {
+    try {
+      const userId = req.user?.id;
+      const response = await this.organizationService.acceptInvitation(body.token, userId);
+      return ApiResource.successResponse(response);
+    } catch (error) {
+      return ApiResource.errorResponse(error);
     }
+  }
 }

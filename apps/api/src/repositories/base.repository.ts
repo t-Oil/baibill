@@ -55,9 +55,7 @@ export class BaseRepository<Entity> extends Repository<Entity> {
     super(entity, manager);
   }
 
-  async findOneWithActive(
-    options?: FindOneOptions<Entity>,
-  ): Promise<Entity | null> {
+  async findOneWithActive(options?: FindOneOptions<Entity>): Promise<Entity | null> {
     const mergedWhere: FindOptionsWhere<Entity> = {
       ...(options?.where as FindOptionsWhere<Entity>),
       isActive: ActiveStatusEnum.ACTIVE,
@@ -86,20 +84,11 @@ export class BaseRepository<Entity> extends Repository<Entity> {
     this.applyIncludes(queryBuilder, includes || [], joinedRelations);
 
     if (textSearch && searchFields?.length) {
-      this.applyLegacyTextSearch(
-        queryBuilder,
-        searchFields,
-        textSearch,
-        joinedRelations,
-      );
+      this.applyLegacyTextSearch(queryBuilder, searchFields, textSearch, joinedRelations);
     }
 
     if (whereConditions) {
-      this.applyLegacyWhereConditions(
-        queryBuilder,
-        whereConditions,
-        joinedRelations,
-      );
+      this.applyLegacyWhereConditions(queryBuilder, whereConditions, joinedRelations);
     }
 
     if (advancedSearch) {
@@ -109,9 +98,7 @@ export class BaseRepository<Entity> extends Repository<Entity> {
     const sortPath = this.resolveSortPath(sortColumn, joinedRelations);
     queryBuilder.orderBy(sortPath, sortDirection);
 
-    queryBuilder
-      .take(+options.limit)
-      .skip((+options.page - 1) * +options.limit);
+    queryBuilder.take(+options.limit).skip((+options.page - 1) * +options.limit);
 
     const [data, total] = await queryBuilder.getManyAndCount();
 
@@ -208,11 +195,7 @@ export class BaseRepository<Entity> extends Repository<Entity> {
     fieldsToCheck.forEach((field) => {
       if (field.includes('.')) {
         const relationPath = this.extractRelationPath(field);
-        this.ensureNestedRelationJoined(
-          queryBuilder,
-          relationPath,
-          joinedRelations,
-        );
+        this.ensureNestedRelationJoined(queryBuilder, relationPath, joinedRelations);
       }
     });
   }
@@ -226,11 +209,7 @@ export class BaseRepository<Entity> extends Repository<Entity> {
       // Ensure relations are joined in the main query builder
       if (field.includes('.')) {
         const relationPath = this.extractRelationPath(field);
-        this.ensureNestedRelationJoined(
-          queryBuilder.subQuery(),
-          relationPath,
-          joinedRelations,
-        );
+        this.ensureNestedRelationJoined(queryBuilder.subQuery(), relationPath, joinedRelations);
       }
 
       const columnPath = this.resolveFieldPath(field);
@@ -332,9 +311,7 @@ export class BaseRepository<Entity> extends Repository<Entity> {
 
       case 'between':
         if (!Array.isArray(value) || value.length !== 2) {
-          throw new Error(
-            'Between operator requires array with exactly 2 values',
-          );
+          throw new Error('Between operator requires array with exactly 2 values');
         }
         return {
           clause: `${columnPath} BETWEEN :${paramName}Start AND :${paramName}End`,
@@ -373,15 +350,9 @@ export class BaseRepository<Entity> extends Repository<Entity> {
     parts.forEach((part, index) => {
       currentPath = currentPath ? `${currentPath}.${part}` : part;
 
-      if (
-        !joinedRelations.has(currentPath) &&
-        this.isValidRelation(currentPath)
-      ) {
+      if (!joinedRelations.has(currentPath) && this.isValidRelation(currentPath)) {
         const relationAlias = this.getRelationAlias(currentPath);
-        queryBuilder.leftJoinAndSelect(
-          `${currentAlias}.${part}`,
-          relationAlias,
-        );
+        queryBuilder.leftJoinAndSelect(`${currentAlias}.${part}`, relationAlias);
         joinedRelations.add(currentPath);
         currentAlias = relationAlias;
       } else if (joinedRelations.has(currentPath)) {
@@ -419,10 +390,7 @@ export class BaseRepository<Entity> extends Repository<Entity> {
     return parts.join('.');
   }
 
-  private resolveSortPath(
-    sortColumn: string,
-    joinedRelations: Set<string>,
-  ): string {
+  private resolveSortPath(sortColumn: string, joinedRelations: Set<string>): string {
     if (sortColumn.includes('.')) {
       const relationPath = this.extractRelationPath(sortColumn);
       if (joinedRelations.has(relationPath)) {
@@ -444,9 +412,7 @@ export class BaseRepository<Entity> extends Repository<Entity> {
     try {
       const entityMetadata = this.manager.connection.getMetadata(this.entity);
       const [rootRelation] = relation.split('.');
-      return entityMetadata.relations.some(
-        (r) => r.propertyName === rootRelation,
-      );
+      return entityMetadata.relations.some((r) => r.propertyName === rootRelation);
     } catch {
       return false;
     }
@@ -461,11 +427,7 @@ export class BaseRepository<Entity> extends Repository<Entity> {
     searchFields.forEach((field) => {
       if (field.includes('.')) {
         const relationPath = this.extractRelationPath(field);
-        this.ensureNestedRelationJoined(
-          queryBuilder,
-          relationPath,
-          joinedRelations,
-        );
+        this.ensureNestedRelationJoined(queryBuilder, relationPath, joinedRelations);
       }
     });
 
@@ -486,18 +448,12 @@ export class BaseRepository<Entity> extends Repository<Entity> {
     whereConditions: { [key: string]: any } | Array<{ [key: string]: any }>,
     joinedRelations: Set<string>,
   ): void {
-    const allConditions = Array.isArray(whereConditions)
-      ? whereConditions
-      : [whereConditions];
+    const allConditions = Array.isArray(whereConditions) ? whereConditions : [whereConditions];
     allConditions.forEach((condition) => {
       Object.keys(condition).forEach((key) => {
         if (key.includes('.')) {
           const relationPath = this.extractRelationPath(key);
-          this.ensureNestedRelationJoined(
-            queryBuilder,
-            relationPath,
-            joinedRelations,
-          );
+          this.ensureNestedRelationJoined(queryBuilder, relationPath, joinedRelations);
         }
       });
     });

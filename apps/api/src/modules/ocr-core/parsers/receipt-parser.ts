@@ -12,7 +12,7 @@ export class ReceiptParser {
 
   private extractMerchant(text: string): string {
     // Simple heuristic: first line is often merchant name
-    const lines = text.split('\n').filter(l => l.trim());
+    const lines = text.split('\n').filter((l) => l.trim());
     return lines[0] || 'Unknown Merchant';
   }
 

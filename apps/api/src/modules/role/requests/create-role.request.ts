@@ -2,13 +2,7 @@ import { ActiveStatusEnum } from '@commons/enums/active-status.enum';
 import { isDuplicateField } from '@commons/validators/is-duplicate-field.validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { RoleRepository } from '@repositories/role.repository';
-import {
-  IsArray,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  MaxLength,
-} from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsOptional, MaxLength } from 'class-validator';
 
 export class CreateRoleRequest {
   @MaxLength(100)

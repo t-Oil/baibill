@@ -129,15 +129,15 @@ JWT_REFRESH_EXPIRE=1h   # 1 hour = 3600 seconds
 
 ### Common Duration Values
 
-| String | Numeric | Use Case |
-|--------|---------|----------|
-| `5m` | `300` | Short-lived access tokens (dev) |
-| `15m` | `900` | Standard access tokens |
-| `30m` | `1800` | Extended access tokens |
-| `1h` | `3600` | Short-lived refresh tokens |
-| `24h` | `86400` | Standard refresh tokens |
-| `7d` | `604800` | Long-lived refresh tokens |
-| `30d` | `2592000` | "Remember me" tokens |
+| String | Numeric   | Use Case                        |
+| ------ | --------- | ------------------------------- |
+| `5m`   | `300`     | Short-lived access tokens (dev) |
+| `15m`  | `900`     | Standard access tokens          |
+| `30m`  | `1800`    | Extended access tokens          |
+| `1h`   | `3600`    | Short-lived refresh tokens      |
+| `24h`  | `86400`   | Standard refresh tokens         |
+| `7d`   | `604800`  | Long-lived refresh tokens       |
+| `30d`  | `2592000` | "Remember me" tokens            |
 
 ## Migration Guide
 

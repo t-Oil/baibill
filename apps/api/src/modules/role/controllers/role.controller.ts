@@ -104,9 +104,7 @@ export class RoleController {
   @Post()
   @Roles(UserPermission.USER_ROLE_CREATE)
   @UseResources(RoleResource)
-  async createRole(
-    @Body() roleRequest: CreateRoleRequest,
-  ): Promise<ApiResource> {
+  async createRole(@Body() roleRequest: CreateRoleRequest): Promise<ApiResource> {
     try {
       const response = await this.roleService.create(roleRequest);
 

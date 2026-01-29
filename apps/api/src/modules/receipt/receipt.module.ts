@@ -14,12 +14,7 @@ import { UserOrganizationRepository } from '@repositories/user-organization.repo
  * Module for receipt processing.
  */
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([ReceiptEntity]),
-    OcrModule,
-    AiModule,
-    LoggerModule,
-  ],
+  imports: [TypeOrmModule.forFeature([ReceiptEntity]), OcrModule, AiModule, LoggerModule],
   controllers: [ReceiptController],
   providers: [
     ReceiptService,
@@ -29,5 +24,4 @@ import { UserOrganizationRepository } from '@repositories/user-organization.repo
   ],
   exports: [ReceiptService],
 })
-export class ReceiptModule { }
-
+export class ReceiptModule {}

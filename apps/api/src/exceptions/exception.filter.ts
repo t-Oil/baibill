@@ -68,24 +68,18 @@ export class ExceptionFilter implements ExceptionFilterInterface {
    * @param exception
    * @returns HandleHttpExceptionResponseInterface
    */
-  private handleHttpException(
-    exception: HttpException,
-  ): HandleHttpExceptionResponseInterface {
+  private handleHttpException(exception: HttpException): HandleHttpExceptionResponseInterface {
     let errorCode = 0;
     let errorMessage: string = ErrorCodes[errorCode];
     let errors: string[] = Object();
 
     if (exception instanceof ValidationException) {
       const validationErrors = exception.getResponse() as ValidationError[];
-      const validationMessages = new FlattenValidationErrors(
-        validationErrors,
-      ).messages();
+      const validationMessages = new FlattenValidationErrors(validationErrors).messages();
 
       errorCode = 900422;
       errorMessage = ErrorCodes[errorCode];
-      errors = Array.isArray(validationMessages)
-        ? validationMessages
-        : [validationMessages];
+      errors = Array.isArray(validationMessages) ? validationMessages : [validationMessages];
     }
 
     const exceptionResponse: HttpExceptionResponseInterface =
@@ -105,10 +99,7 @@ export class ExceptionFilter implements ExceptionFilterInterface {
         : get(exception.getResponse(), 'error.errors', []);
     }
 
-    if (
-      exception instanceof ForbiddenException ||
-      exception instanceof UnauthorizedException
-    ) {
+    if (exception instanceof ForbiddenException || exception instanceof UnauthorizedException) {
       errorCode = 900403;
       errorMessage = ErrorCodes[errorCode];
     }

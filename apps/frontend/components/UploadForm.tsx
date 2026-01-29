@@ -52,4 +52,3 @@ export function UploadForm({ onUpload, loading }: UploadFormProps) {
     </div>
   );
 }
-

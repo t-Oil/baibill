@@ -71,9 +71,7 @@ export class CreateReceiptsTable1737625200000 {
       true,
     );
 
-    await queryRunner.query(
-      `CREATE INDEX "IDX_receipts_uid" ON "receipts" ("uid")`,
-    );
+    await queryRunner.query(`CREATE INDEX "IDX_receipts_uid" ON "receipts" ("uid")`);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

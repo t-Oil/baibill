@@ -25,16 +25,19 @@ This guide explains how to run the Receipt OCR application using Docker Compose 
 ## Quick Start
 
 1. **Clone the repository** (if not already done):
+
    ```bash
    cd /path/to/receipt-ocr
    ```
 
 2. **Set up environment variables**:
+
    ```bash
    cp .env.docker.example .env
    ```
 
 3. **Edit `.env` file** and update the following **critical** values:
+
    ```bash
    # Generate secure secrets
    node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
@@ -46,11 +49,13 @@ This guide explains how to run the Receipt OCR application using Docker Compose 
    ```
 
 4. **Build and start the services**:
+
    ```bash
    docker-compose up -d
    ```
 
 5. **Check the status**:
+
    ```bash
    docker-compose ps
    ```
@@ -61,6 +66,7 @@ This guide explains how to run the Receipt OCR application using Docker Compose 
    - API Documentation: http://localhost/api/docs (development only)
 
 7. **Run database migrations**:
+
    ```bash
    docker-compose exec api npm run migration:run
    ```
@@ -109,28 +115,30 @@ The Docker setup consists of four services:
 
 All configuration is done through the `.env` file. Key variables:
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `DATABASE_NAME` | PostgreSQL database name | `receipt_ocr_db` |
-| `DATABASE_USER` | PostgreSQL username | `receipt_ocr_user` |
-| `DATABASE_PASSWORD` | PostgreSQL password (change this!) | Strong password |
-| `JWT_ACCESS_SECRET` | JWT access token secret | 64+ char random string |
-| `JWT_REFRESH_SECRET` | JWT refresh token secret | 64+ char random string |
-| `DATABASE_SYNC` | Auto-sync DB schema (false in prod) | `false` |
-| `NEXT_PUBLIC_API_URL` | Public API URL | `http://localhost/api` |
+| Variable              | Description                         | Example                |
+| --------------------- | ----------------------------------- | ---------------------- |
+| `DATABASE_NAME`       | PostgreSQL database name            | `receipt_ocr_db`       |
+| `DATABASE_USER`       | PostgreSQL username                 | `receipt_ocr_user`     |
+| `DATABASE_PASSWORD`   | PostgreSQL password (change this!)  | Strong password        |
+| `JWT_ACCESS_SECRET`   | JWT access token secret             | 64+ char random string |
+| `JWT_REFRESH_SECRET`  | JWT refresh token secret            | 64+ char random string |
+| `DATABASE_SYNC`       | Auto-sync DB schema (false in prod) | `false`                |
+| `NEXT_PUBLIC_API_URL` | Public API URL                      | `http://localhost/api` |
 
 ### Docker Compose Ports
 
 By default, Nginx exposes:
+
 - Port 80 (HTTP)
 - Port 443 (HTTPS - when configured)
 
 To change ports, edit `docker-compose.yml`:
+
 ```yaml
 nginx:
   ports:
-    - "8080:80"  # Change left side only
-    - "8443:443"
+    - '8080:80' # Change left side only
+    - '8443:443'
 ```
 
 ## Security Features
@@ -166,22 +174,26 @@ For production deployment, enable HTTPS:
 ### Option 1: Let's Encrypt (Recommended for production)
 
 1. **Install Certbot**:
+
    ```bash
    sudo apt-get update
    sudo apt-get install certbot
    ```
 
 2. **Stop Docker containers**:
+
    ```bash
    docker-compose down
    ```
 
 3. **Generate certificates**:
+
    ```bash
    sudo certbot certonly --standalone -d your-domain.com -d www.your-domain.com
    ```
 
 4. **Copy certificates**:
+
    ```bash
    sudo cp /etc/letsencrypt/live/your-domain.com/fullchain.pem nginx/ssl/
    sudo cp /etc/letsencrypt/live/your-domain.com/privkey.pem nginx/ssl/
@@ -193,6 +205,7 @@ For production deployment, enable HTTPS:
    Edit `nginx/conf.d/default.conf` and uncomment the HTTPS server block.
 
 6. **Update environment variables**:
+
    ```bash
    # In .env file
    APP_URL=https://your-domain.com
@@ -221,11 +234,13 @@ Then follow steps 5-7 above.
 ### Backups
 
 **Create a backup**:
+
 ```bash
 docker-compose exec postgres pg_dump -U receipt_ocr_user receipt_ocr_db > backup_$(date +%Y%m%d_%H%M%S).sql
 ```
 
 **Restore from backup**:
+
 ```bash
 docker-compose exec -T postgres psql -U receipt_ocr_user receipt_ocr_db < backup_20250127_120000.sql
 ```
@@ -233,21 +248,25 @@ docker-compose exec -T postgres psql -U receipt_ocr_user receipt_ocr_db < backup
 ### Migrations
 
 **Create a new migration**:
+
 ```bash
 docker-compose exec api npm run migration:generate -- src/migrations/MigrationName
 ```
 
 **Run migrations**:
+
 ```bash
 docker-compose exec api npm run migration:run
 ```
 
 **Revert last migration**:
+
 ```bash
 docker-compose exec api npm run migration:revert
 ```
 
 **Show migration status**:
+
 ```bash
 docker-compose exec api npm run migration:show
 ```
@@ -263,11 +282,13 @@ docker-compose exec postgres psql -U receipt_ocr_user -d receipt_ocr_db
 ### View Logs
 
 **All services**:
+
 ```bash
 docker-compose logs -f
 ```
 
 **Specific service**:
+
 ```bash
 docker-compose logs -f api
 docker-compose logs -f frontend
@@ -276,6 +297,7 @@ docker-compose logs -f postgres
 ```
 
 **Last 100 lines**:
+
 ```bash
 docker-compose logs --tail=100 api
 ```
@@ -283,6 +305,7 @@ docker-compose logs --tail=100 api
 ### Health Checks
 
 **Check service health**:
+
 ```bash
 docker-compose ps
 ```
@@ -290,6 +313,7 @@ docker-compose ps
 All services should show "healthy" status.
 
 **Manual health checks**:
+
 ```bash
 # Nginx
 curl http://localhost/health
@@ -312,11 +336,13 @@ docker stats
 ### Container Won't Start
 
 1. **Check logs**:
+
    ```bash
    docker-compose logs <service-name>
    ```
 
 2. **Check for port conflicts**:
+
    ```bash
    sudo lsof -i :80
    sudo lsof -i :443
@@ -330,11 +356,13 @@ docker stats
 ### Database Connection Issues
 
 1. **Verify PostgreSQL is running**:
+
    ```bash
    docker-compose ps postgres
    ```
 
 2. **Test database connection**:
+
    ```bash
    docker-compose exec postgres pg_isready -U receipt_ocr_user
    ```
@@ -347,12 +375,14 @@ docker stats
 ### API Returns 502 Bad Gateway
 
 1. **Check API container health**:
+
    ```bash
    docker-compose ps api
    docker-compose logs api
    ```
 
 2. **Verify API is responding**:
+
    ```bash
    docker-compose exec api wget -O- http://localhost:4000/api/health
    ```
@@ -468,6 +498,7 @@ docker-compose ps
 ## Support
 
 For issues or questions:
+
 1. Check logs: `docker-compose logs -f`
 2. Review this documentation
 3. Check Docker and application health

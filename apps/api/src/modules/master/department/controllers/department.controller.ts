@@ -11,13 +11,9 @@ export class DepartmentController {
 
   @Get()
   @UseResources(DepartmentResource)
-  async findAll(
-    @Query('textSearch') textSearch?: string,
-  ): Promise<ApiResource> {
+  async findAll(@Query('textSearch') textSearch?: string): Promise<ApiResource> {
     const response: MsDepartmentEntity[] = await this.departmentService.findAll(textSearch);
 
-    return ApiResource.successResponse(
-      response
-    )
+    return ApiResource.successResponse(response);
   }
 }

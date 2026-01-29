@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from './base-entity';
 import { ActiveStatusEnum } from '@commons/enums/active-status.enum';
 import { PermissionEntity } from './permission.entity';

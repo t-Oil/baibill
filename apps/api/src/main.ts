@@ -7,13 +7,12 @@ import { AppModule } from '@modules/app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   const configService = app.get(ConfigService);
   const isDevelopmentMode: boolean =
-    configService.get<'test' | 'develop' | 'production'>('mode') !==
-    'production';
+    configService.get<'test' | 'develop' | 'production'>('mode') !== 'production';
   const appName: string = configService.get<string>('appName');
 
   app.enableCors({

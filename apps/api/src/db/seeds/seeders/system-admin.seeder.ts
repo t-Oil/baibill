@@ -2,7 +2,7 @@ import { DataSource } from 'typeorm';
 import { Seeder } from '../seeder.interface';
 import { hashSync } from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
-import { ActiveStatusEnum } from "@commons/enums/active-status.enum";
+import { ActiveStatusEnum } from '@commons/enums/active-status.enum';
 import { UserEntity } from '@entities/user.entity';
 import { RoleEntity } from '@entities/role.entity';
 
@@ -43,13 +43,13 @@ export default class SystemAdminSeeder implements Seeder {
         uid: uuidv4(),
         email: 'system@mock.com',
         password: hashSync('admin12345', 10),
-        firstName: "System",
-        lastName: "Admin",
+        firstName: 'System',
+        lastName: 'Admin',
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
         isActive: ActiveStatusEnum.IN_ACTIVE,
-        roles: []
+        roles: [],
       });
     }
 
@@ -58,13 +58,13 @@ export default class SystemAdminSeeder implements Seeder {
       uid: uuidv4(),
       email: 'admin@example.com',
       password: hashSync('password123', 10),
-      firstName: "Admin",
-      lastName: "User",
+      firstName: 'Admin',
+      lastName: 'User',
       createdAt: new Date(),
       updatedAt: new Date(),
       deletedAt: null,
       isActive: ActiveStatusEnum.ACTIVE,
-      roles: [adminRole]
+      roles: [adminRole],
     });
 
     const savedUsers = await userRepository.save(users);

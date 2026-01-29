@@ -49,16 +49,19 @@ The migrations are ordered by timestamp to ensure they run in the correct sequen
 ## Running Migrations
 
 ### Run all pending migrations
+
 ```bash
 npm run migration:run
 ```
 
 ### Check migration status
+
 ```bash
 npm run migration:show
 ```
 
 ### Rollback last migration
+
 ```bash
 npm run migration:revert
 ```

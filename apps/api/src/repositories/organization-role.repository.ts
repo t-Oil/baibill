@@ -8,7 +8,7 @@ import { OrganizationRoleEntity } from '@entities/organization-role.entity';
  */
 @Injectable()
 export class OrganizationRoleRepository extends BaseRepository<OrganizationRoleEntity> {
-    constructor(private dataSource: DataSource) {
-        super(OrganizationRoleEntity, dataSource.createEntityManager());
-    }
+  constructor(private dataSource: DataSource) {
+    super(OrganizationRoleEntity, dataSource.createEntityManager());
+  }
 }

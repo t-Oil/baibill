@@ -30,20 +30,14 @@ export class FlattenValidationErrors {
 
     const validationErrors = [];
 
-    parentPath = parentPath
-      ? `${parentPath}.${error.property}`
-      : error.property;
+    parentPath = parentPath ? `${parentPath}.${error.property}` : error.property;
 
     for (const item of error.children) {
       if (item.children && item.children.length) {
-        validationErrors.push(
-          ...this.mapChildrenToValidationErrors(item, parentPath),
-        );
+        validationErrors.push(...this.mapChildrenToValidationErrors(item, parentPath));
       }
 
-      validationErrors.push(
-        this.prependConstraintsWithParentProp(parentPath, item),
-      );
+      validationErrors.push(this.prependConstraintsWithParentProp(parentPath, item));
     }
 
     return validationErrors;

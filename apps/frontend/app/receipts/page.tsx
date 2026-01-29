@@ -36,7 +36,6 @@ export default function ReceiptsPage() {
     fetchReceipts();
   }, [currentPage, searchQuery, currentOrg]);
 
-
   const fetchReceipts = async () => {
     setIsLoading(true);
     try {
@@ -84,7 +83,7 @@ export default function ReceiptsPage() {
       if (searchQuery) {
         params.append('search', searchQuery);
       }
-      
+
       params.append('format', format);
 
       const headers: HeadersInit = {
@@ -147,19 +146,39 @@ export default function ReceiptsPage() {
                   onClick={() => setShowExportMenu(!showExportMenu)}
                   className="inline-flex items-center px-4 py-2 bg-[var(--surface)] text-[var(--text)] border border-[var(--border)] rounded-lg hover:bg-[var(--bg)] transition-all font-medium"
                 >
-                  <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                    />
                   </svg>
                   Export
-                  <svg className={`w-4 h-4 ml-2 transition-transform ${showExportMenu ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  <svg
+                    className={`w-4 h-4 ml-2 transition-transform ${showExportMenu ? 'rotate-180' : ''}`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
-                
+
                 {showExportMenu && (
                   <>
-                    <div 
-                      className="fixed inset-0 z-10" 
+                    <div
+                      className="fixed inset-0 z-10"
                       onClick={() => setShowExportMenu(false)}
                     ></div>
                     <div className="absolute right-0 mt-2 w-48 bg-[var(--surface)] rounded-lg shadow-lg z-20 border border-[var(--border)] py-1">
@@ -170,8 +189,18 @@ export default function ReceiptsPage() {
                         }}
                         className="flex items-center w-full px-4 py-2 text-sm text-[var(--text)] hover:bg-[var(--bg)] transition-colors"
                       >
-                        <svg className="w-4 h-4 mr-2 text-[var(--muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        <svg
+                          className="w-4 h-4 mr-2 text-[var(--muted)]"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
                         </svg>
                         Export CSV
                       </button>
@@ -182,8 +211,18 @@ export default function ReceiptsPage() {
                         }}
                         className="flex items-center w-full px-4 py-2 text-sm text-[var(--text)] hover:bg-[var(--bg)] transition-colors"
                       >
-                        <svg className="w-4 h-4 mr-2 text-[var(--muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        <svg
+                          className="w-4 h-4 mr-2 text-[var(--muted)]"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
                         </svg>
                         Export Excel
                       </button>
@@ -196,7 +235,12 @@ export default function ReceiptsPage() {
                 className="inline-flex items-center px-4 py-2 bg-[var(--button-primary)] text-white rounded-lg hover:bg-[var(--button-hover)] transition-all font-medium"
               >
                 <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
                 </svg>
                 Upload Receipt
               </Link>
@@ -207,8 +251,18 @@ export default function ReceiptsPage() {
           <div className="bg-[var(--surface)] rounded-xl border border-[var(--border)] p-4 transition-colors duration-200">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg className="h-5 w-5 text-[var(--muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <svg
+                  className="h-5 w-5 text-[var(--muted)]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
                 </svg>
               </div>
               <input
@@ -246,14 +300,26 @@ export default function ReceiptsPage() {
                   />
                 </svg>
                 <h3 className="mt-2 text-sm font-medium text-[var(--text)]">No receipts found</h3>
-                <p className="mt-1 text-sm text-[var(--muted)]">Get started by uploading a receipt.</p>
+                <p className="mt-1 text-sm text-[var(--muted)]">
+                  Get started by uploading a receipt.
+                </p>
                 <div className="mt-6">
                   <Link
                     href="/upload"
                     className="inline-flex items-center px-4 py-2 bg-[var(--button-primary)] text-white rounded-lg hover:bg-[var(--button-hover)] transition-all font-medium"
                   >
-                    <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    <svg
+                      className="w-5 h-5 mr-2"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
                     </svg>
                     Upload Receipt
                   </Link>
@@ -266,12 +332,24 @@ export default function ReceiptsPage() {
                   <table className="min-w-full divide-y divide-[var(--border)]">
                     <thead className="bg-[var(--bg)]">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-[var(--muted)] uppercase tracking-wider">Merchant</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-[var(--muted)] uppercase tracking-wider">Receipt No</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-[var(--muted)] uppercase tracking-wider">Date</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-[var(--muted)] uppercase tracking-wider">Amount</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-[var(--muted)] uppercase tracking-wider">VAT</th>
-                        <th className="px-6 py-3 text-right text-xs font-medium text-[var(--muted)] uppercase tracking-wider">Actions</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-[var(--muted)] uppercase tracking-wider">
+                          Merchant
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-[var(--muted)] uppercase tracking-wider">
+                          Receipt No
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-[var(--muted)] uppercase tracking-wider">
+                          Date
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-[var(--muted)] uppercase tracking-wider">
+                          Amount
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-[var(--muted)] uppercase tracking-wider">
+                          VAT
+                        </th>
+                        <th className="px-6 py-3 text-right text-xs font-medium text-[var(--muted)] uppercase tracking-wider">
+                          Actions
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[var(--border)]">
@@ -280,23 +358,41 @@ export default function ReceiptsPage() {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
                               <div className="h-10 w-10 flex-shrink-0 bg-[var(--button-primary)]/10 rounded-lg flex items-center justify-center">
-                                <svg className="w-5 h-5 text-[var(--button-primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                <svg
+                                  className="w-5 h-5 text-[var(--button-primary)]"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                  />
                                 </svg>
                               </div>
                               <div className="ml-4">
-                                <div className="text-sm font-medium text-[var(--text)]">{receipt.merchantName}</div>
+                                <div className="text-sm font-medium text-[var(--text)]">
+                                  {receipt.merchantName}
+                                </div>
                                 {receipt.companyTaxId && (
-                                  <div className="text-sm text-[var(--muted)]">Tax ID: {receipt.companyTaxId}</div>
+                                  <div className="text-sm text-[var(--muted)]">
+                                    Tax ID: {receipt.companyTaxId}
+                                  </div>
                                 )}
                               </div>
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="text-sm text-[var(--text)]">{receipt.receiptNo || '-'}</span>
+                            <span className="text-sm text-[var(--text)]">
+                              {receipt.receiptNo || '-'}
+                            </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="text-sm text-[var(--text)]">{formatDate(receipt.date)}</span>
+                            <span className="text-sm text-[var(--text)]">
+                              {formatDate(receipt.date)}
+                            </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className="text-sm font-semibold text-[var(--text)]">
@@ -304,11 +400,13 @@ export default function ReceiptsPage() {
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                              receipt.vatIncluded
-                                ? 'bg-[var(--success)]/10 text-[var(--success)]'
-                                : 'bg-[var(--muted)]/10 text-[var(--muted)]'
-                            }`}>
+                            <span
+                              className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                                receipt.vatIncluded
+                                  ? 'bg-[var(--success)]/10 text-[var(--success)]'
+                                  : 'bg-[var(--muted)]/10 text-[var(--muted)]'
+                              }`}
+                            >
                               {receipt.vatIncluded ? 'Incl. VAT' : 'Excl. VAT'}
                             </span>
                           </td>
@@ -319,17 +417,42 @@ export default function ReceiptsPage() {
                                 className="p-2 text-[var(--button-primary)] hover:bg-[var(--button-primary)]/10 rounded-lg transition-colors"
                                 title="View"
                               >
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                <svg
+                                  className="w-5 h-5"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                  />
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                  />
                                 </svg>
                               </Link>
-                              <button 
+                              <button
                                 className="p-2 text-[var(--error)] hover:bg-[var(--error)]/10 rounded-lg transition-colors"
                                 title="Delete"
                               >
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                <svg
+                                  className="w-5 h-5"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                  />
                                 </svg>
                               </button>
                             </div>
@@ -347,26 +470,44 @@ export default function ReceiptsPage() {
                       <div className="flex items-start justify-between">
                         <div className="flex items-center space-x-3">
                           <div className="h-10 w-10 flex-shrink-0 bg-[var(--button-primary)]/10 rounded-lg flex items-center justify-center">
-                            <svg className="w-5 h-5 text-[var(--button-primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            <svg
+                              className="w-5 h-5 text-[var(--button-primary)]"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                              />
                             </svg>
                           </div>
                           <div>
-                            <div className="text-sm font-medium text-[var(--text)]">{receipt.merchantName}</div>
-                            <div className="text-xs text-[var(--muted)] mt-1">{receipt.receiptNo || 'No receipt number'}</div>
+                            <div className="text-sm font-medium text-[var(--text)]">
+                              {receipt.merchantName}
+                            </div>
+                            <div className="text-xs text-[var(--muted)] mt-1">
+                              {receipt.receiptNo || 'No receipt number'}
+                            </div>
                           </div>
                         </div>
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          receipt.vatIncluded
-                            ? 'bg-[var(--success)]/10 text-[var(--success)]'
-                            : 'bg-[var(--muted)]/10 text-[var(--muted)]'
-                        }`}>
+                        <span
+                          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                            receipt.vatIncluded
+                              ? 'bg-[var(--success)]/10 text-[var(--success)]'
+                              : 'bg-[var(--muted)]/10 text-[var(--muted)]'
+                          }`}
+                        >
                           {receipt.vatIncluded ? 'VAT' : 'No VAT'}
                         </span>
                       </div>
                       <div className="mt-3 flex items-center justify-between">
                         <div>
-                          <div className="text-sm text-[var(--muted)]">{formatDate(receipt.date)}</div>
+                          <div className="text-sm text-[var(--muted)]">
+                            {formatDate(receipt.date)}
+                          </div>
                           <div className="text-lg font-semibold text-[var(--text)] mt-1">
                             {formatCurrency(receipt.totalAmount, receipt.currency)}
                           </div>
@@ -377,17 +518,42 @@ export default function ReceiptsPage() {
                             className="p-2 text-[var(--button-primary)] hover:bg-[var(--button-primary)]/10 rounded-lg transition-colors"
                             title="View"
                           >
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            <svg
+                              className="w-5 h-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                              />
                             </svg>
                           </Link>
-                          <button 
+                          <button
                             className="p-2 text-[var(--error)] hover:bg-[var(--error)]/10 rounded-lg transition-colors"
                             title="Delete"
                           >
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            <svg
+                              className="w-5 h-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                              />
                             </svg>
                           </button>
                         </div>
@@ -417,7 +583,8 @@ export default function ReceiptsPage() {
                   <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                     <div>
                       <p className="text-sm text-[var(--muted)]">
-                        Showing page <span className="font-medium text-[var(--text)]">{currentPage}</span> of{' '}
+                        Showing page{' '}
+                        <span className="font-medium text-[var(--text)]">{currentPage}</span> of{' '}
                         <span className="font-medium text-[var(--text)]">{totalPages}</span>
                       </p>
                     </div>
@@ -428,8 +595,18 @@ export default function ReceiptsPage() {
                           disabled={currentPage === 1}
                           className="relative inline-flex items-center px-3 py-2 rounded-l-lg text-sm font-medium text-[var(--text)] bg-[var(--surface)] border border-[var(--border)] hover:bg-[var(--bg)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
-                          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                          <svg
+                            className="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M15 19l-7-7 7-7"
+                            />
                           </svg>
                         </button>
                         {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -463,8 +640,18 @@ export default function ReceiptsPage() {
                           disabled={currentPage === totalPages}
                           className="relative inline-flex items-center px-3 py-2 rounded-r-lg text-sm font-medium text-[var(--text)] bg-[var(--surface)] border border-[var(--border)] hover:bg-[var(--bg)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
-                          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          <svg
+                            className="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 5l7 7-7 7"
+                            />
                           </svg>
                         </button>
                       </nav>

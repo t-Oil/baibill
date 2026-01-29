@@ -12,9 +12,7 @@ export class PaginateQuery {
   page: number;
 
   @IsOptional()
-  @Transform(({ value }) =>
-    parseInt(defaultTo(value, configService.get<number>('PER_PAGE'))),
-  )
+  @Transform(({ value }) => parseInt(defaultTo(value, configService.get<number>('PER_PAGE'))))
   @Expose({ name: 'perPage' })
   @IsNumber()
   limit: number;

@@ -24,5 +24,4 @@ import { OrganizationInvitationRepository } from '@repositories/organization-inv
   ],
   exports: [UserService, UserRepository],
 })
-export class UserModule { }
-
+export class UserModule {}

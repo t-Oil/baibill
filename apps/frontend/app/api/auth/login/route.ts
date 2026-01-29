@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     console.error('Login proxy error:', error);
     return NextResponse.json(
       { status: { code: 500, message: 'Failed to connect to API server' } },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

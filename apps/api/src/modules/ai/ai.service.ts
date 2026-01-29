@@ -68,7 +68,7 @@ export class AiService implements OnModuleInit {
 
       this.client = new OpenAI({ apiKey });
       this.logger.log(
-        `AI Service initialized with model: ${this.model}, temperature: ${this.temperature}`
+        `AI Service initialized with model: ${this.model}, temperature: ${this.temperature}`,
       );
     } else {
       this.logger.log('AI Service is disabled (OPENAI_ENABLED=false)');
@@ -107,7 +107,7 @@ export class AiService implements OnModuleInit {
 
     try {
       this.logger.log(
-        `AI parsing receipt (length: ${ocrText.length}, model: ${this.model}, version: ${RECEIPT_PARSER_PROMPT_VERSION})`
+        `AI parsing receipt (length: ${ocrText.length}, model: ${this.model}, version: ${RECEIPT_PARSER_PROMPT_VERSION})`,
       );
 
       const completion = await this.client!.chat.completions.create({
@@ -147,7 +147,7 @@ export class AiService implements OnModuleInit {
       }
 
       this.logger.log(
-        `AI parsing successful (confidence: ${parsed.confidence}, merchant: ${!!parsed.merchantName}, total: ${!!parsed.totalAmount}, date: ${!!parsed.date})`
+        `AI parsing successful (confidence: ${parsed.confidence}, merchant: ${!!parsed.merchantName}, total: ${!!parsed.totalAmount}, date: ${!!parsed.date})`,
       );
 
       return { result: parsed, metadata };

@@ -17,13 +17,13 @@ export abstract class BaseEntity {
   @Column({ type: 'uuid', unique: true })
   uid!: string;
 
-  @Column({ name: 'created_by' })
+  @Column({ name: 'created_by', type: 'int', nullable: true })
   createdById!: number;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt!: Date;
 
-  @Column({ name: 'updated_by', nullable: true })
+  @Column({ name: 'updated_by', type: 'int', nullable: true })
   updatedById!: number;
 
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })

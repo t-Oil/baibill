@@ -81,9 +81,7 @@ describe('DepartmentService - findAll', () => {
     const queryBuilder = repository.createQueryBuilder('department');
     jest.spyOn(queryBuilder, 'where').mockReturnThis();
     jest.spyOn(queryBuilder, 'orderBy').mockReturnThis();
-    jest
-      .spyOn(queryBuilder, 'getMany')
-      .mockRejectedValue(new Error('Database error'));
+    jest.spyOn(queryBuilder, 'getMany').mockRejectedValue(new Error('Database error'));
     jest.spyOn(repository, 'createQueryBuilder').mockReturnValue(queryBuilder);
 
     await expect(service.findAll('')).rejects.toThrow('Database error');

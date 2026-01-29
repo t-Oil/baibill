@@ -35,8 +35,7 @@ export class MeService {
         },
       });
 
-      const menus: MenuEntity[] =[]
-       
+      const menus: MenuEntity[] = [];
 
       const result: UserEntity & { menus: MenuEntity[] } = {
         ...user,

@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
     console.error('Stats proxy error:', error);
     return NextResponse.json(
       { status: { code: 500, message: 'Failed to connect to API server' } },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

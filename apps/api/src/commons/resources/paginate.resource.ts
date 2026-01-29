@@ -9,7 +9,7 @@ export class ResourceDto {
   };
 }
 
-export class ResourceWithPaginateDto extends ResourceDto{
+export class ResourceWithPaginateDto extends ResourceDto {
   @Expose()
   meta: IPaginationMeta;
 

@@ -5,15 +5,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { MsDepartmentEntity } from '@entities/ms-department.entity';
 
 export default class MasterDepartmentSeeder implements Seeder {
-  public async run(
-    dataSource: DataSource,
-    createdById?: number,
-  ): Promise<void> {
+  public async run(dataSource: DataSource, createdById?: number): Promise<void> {
     const repository = dataSource.getRepository(MsDepartmentEntity);
 
     const count = await repository.count();
     if (count > 0) {
-
       return;
     }
 
@@ -112,6 +108,5 @@ export default class MasterDepartmentSeeder implements Seeder {
     ];
 
     await repository.insert(created);
-
   }
 }

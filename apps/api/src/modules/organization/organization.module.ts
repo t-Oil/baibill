@@ -12,27 +12,29 @@ import { OrganizationRoleEntity } from '@entities/organization-role.entity';
 import { UserOrganizationEntity } from '@entities/user-organization.entity';
 import { OrganizationInvitationEntity } from '@entities/organization-invitation.entity';
 import { UserRepository } from '@repositories/user.repository';
+import { MailModule } from '@modules/mail/mail.module';
 
 /**
  * Module for organization management.
  */
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([
-            OrganizationEntity,
-            OrganizationRoleEntity,
-            UserOrganizationEntity,
-            OrganizationInvitationEntity,
-        ]),
-    ],
-    controllers: [OrganizationController, InvitationController],
-    providers: [
-        OrganizationService,
-        OrganizationRepository,
-        UserOrganizationRepository,
-        OrganizationRoleRepository,
-        OrganizationInvitationRepository,
-        UserRepository,
-    ],
+  imports: [
+    TypeOrmModule.forFeature([
+      OrganizationEntity,
+      OrganizationRoleEntity,
+      UserOrganizationEntity,
+      OrganizationInvitationEntity,
+    ]),
+    MailModule,
+  ],
+  controllers: [OrganizationController, InvitationController],
+  providers: [
+    OrganizationService,
+    OrganizationRepository,
+    UserOrganizationRepository,
+    OrganizationRoleRepository,
+    OrganizationInvitationRepository,
+    UserRepository,
+  ],
 })
-export class OrganizationModule { }
+export class OrganizationModule {}

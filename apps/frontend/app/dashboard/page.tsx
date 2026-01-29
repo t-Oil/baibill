@@ -31,7 +31,7 @@ export default function DashboardPage() {
 
   const fetchDashboardData = useCallback(async () => {
     if (!currentOrg) return;
-    
+
     const token = localStorage.getItem('accessToken');
     if (!token) return;
 
@@ -41,8 +41,8 @@ export default function DashboardPage() {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (statsResponse.status === 401) {
-         // Handle auth error if needed
-         return;
+        // Handle auth error if needed
+        return;
       }
       const statsData = await statsResponse.json();
 
@@ -105,7 +105,9 @@ export default function DashboardPage() {
           {/* Page header */}
           <div>
             <h1 className="text-3xl font-bold text-[var(--text)]">Dashboard</h1>
-            <p className="mt-2 text-[var(--muted)]">Welcome back! Here's an overview of your receipts.</p>
+            <p className="mt-2 text-[var(--muted)]">
+              Welcome back! Here's an overview of your receipts.
+            </p>
           </div>
 
           {/* Stats grid */}
@@ -117,8 +119,18 @@ export default function DashboardPage() {
                   <p className="text-3xl font-bold text-[var(--text)] mt-2">{stats.total}</p>
                 </div>
                 <div className="h-12 w-12 bg-[var(--button-primary)]/10 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-[var(--button-primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  <svg
+                    className="w-6 h-6 text-[var(--button-primary)]"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
                   </svg>
                 </div>
               </div>
@@ -135,8 +147,18 @@ export default function DashboardPage() {
                   <p className="text-3xl font-bold text-[var(--text)] mt-2">{stats.thisWeek}</p>
                 </div>
                 <div className="h-12 w-12 bg-[var(--button-primary)]/10 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-[var(--button-primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  <svg
+                    className="w-6 h-6 text-[var(--button-primary)]"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
                   </svg>
                 </div>
               </div>
@@ -149,11 +171,23 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-[var(--muted)]">Total Amount</p>
-                  <p className="text-2xl font-bold text-[var(--text)] mt-2">{formatCurrency(stats.totalAmount)}</p>
+                  <p className="text-2xl font-bold text-[var(--text)] mt-2">
+                    {formatCurrency(stats.totalAmount)}
+                  </p>
                 </div>
                 <div className="h-12 w-12 bg-[var(--success)]/10 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-[var(--success)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="w-6 h-6 text-[var(--success)]"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
                 </div>
               </div>
@@ -166,11 +200,23 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-[var(--muted)]">Average</p>
-                  <p className="text-2xl font-bold text-[var(--text)] mt-2">{formatCurrency(stats.averageAmount)}</p>
+                  <p className="text-2xl font-bold text-[var(--text)] mt-2">
+                    {formatCurrency(stats.averageAmount)}
+                  </p>
                 </div>
                 <div className="h-12 w-12 bg-[#F59E0B]/10 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-[#F59E0B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  <svg
+                    className="w-6 h-6 text-[#F59E0B]"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                    />
                   </svg>
                 </div>
               </div>
@@ -196,8 +242,18 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <div className="h-10 w-10 bg-[var(--button-primary)]/10 rounded-lg flex items-center justify-center">
-                        <svg className="w-5 h-5 text-[var(--button-primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        <svg
+                          className="w-5 h-5 text-[var(--button-primary)]"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
                         </svg>
                       </div>
                       <div>
@@ -206,14 +262,19 @@ export default function DashboardPage() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-[var(--text)]">{formatCurrency(receipt.totalAmount, receipt.currency)}</p>
+                      <p className="font-semibold text-[var(--text)]">
+                        {formatCurrency(receipt.totalAmount, receipt.currency)}
+                      </p>
                     </div>
                   </div>
                 </Link>
               ))}
             </div>
             <div className="px-6 py-4 border-t border-[var(--border)]">
-              <a href="/receipts" className="text-sm font-medium text-[var(--button-primary)] hover:text-[var(--button-hover)] transition-colors">
+              <a
+                href="/receipts"
+                className="text-sm font-medium text-[var(--button-primary)] hover:text-[var(--button-hover)] transition-colors"
+              >
                 View all receipts →
               </a>
             </div>

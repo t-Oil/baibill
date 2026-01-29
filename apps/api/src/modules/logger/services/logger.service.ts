@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  Logger as NestLogger,
-  LoggerService,
-} from '@nestjs/common';
+import { Injectable, Logger as NestLogger, LoggerService } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 type TErrorDetails = {

@@ -135,6 +135,7 @@ docker-compose exec api npm run migration:run
 ```
 
 Access the application:
+
 - Frontend: `http://localhost`
 - API Docs: `http://localhost/api/docs`
 

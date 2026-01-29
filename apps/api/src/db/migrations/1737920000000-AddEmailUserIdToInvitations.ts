@@ -5,54 +5,54 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
  * and add DECLINED status to the status enum.
  */
 export class AddEmailUserIdToInvitations1737920000000 implements MigrationInterface {
-    name = 'AddEmailUserIdToInvitations1737920000000';
+  name = 'AddEmailUserIdToInvitations1737920000000';
 
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        // Add user_id column (nullable for email-based invitations)
-        await queryRunner.query(`
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    // Add user_id column (nullable for email-based invitations)
+    await queryRunner.query(`
             ALTER TABLE "organization_invitations" 
             ADD COLUMN IF NOT EXISTS "user_id" integer
         `);
 
-        // Make email nullable (for user-id based invitations)
-        await queryRunner.query(`
+    // Make email nullable (for user-id based invitations)
+    await queryRunner.query(`
             ALTER TABLE "organization_invitations" 
             ALTER COLUMN "email" DROP NOT NULL
         `);
 
-        // Add foreign key for user_id
-        await queryRunner.query(`
+    // Add foreign key for user_id
+    await queryRunner.query(`
             ALTER TABLE "organization_invitations" 
             ADD CONSTRAINT "FK_org_invitations_user_id" 
             FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE SET NULL
         `);
 
-        // Add declined to status enum
-        await queryRunner.query(`
+    // Add declined to status enum
+    await queryRunner.query(`
             ALTER TYPE "organization_invitations_status_enum" 
             ADD VALUE IF NOT EXISTS 'declined'
         `);
-    }
+  }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        // Remove foreign key
-        await queryRunner.query(`
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    // Remove foreign key
+    await queryRunner.query(`
             ALTER TABLE "organization_invitations" 
             DROP CONSTRAINT IF EXISTS "FK_org_invitations_user_id"
         `);
 
-        // Remove user_id column
-        await queryRunner.query(`
+    // Remove user_id column
+    await queryRunner.query(`
             ALTER TABLE "organization_invitations" 
             DROP COLUMN IF EXISTS "user_id"
         `);
 
-        // Make email required again
-        await queryRunner.query(`
+    // Make email required again
+    await queryRunner.query(`
             ALTER TABLE "organization_invitations" 
             ALTER COLUMN "email" SET NOT NULL
         `);
 
-        // Note: Cannot easily remove enum value in PostgreSQL
-    }
+    // Note: Cannot easily remove enum value in PostgreSQL
+  }
 }

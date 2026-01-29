@@ -26,13 +26,10 @@ class TypeOrmConfigService implements TypeOrmOptionsFactory {
       synchronize: false,
       dropSchema: this.configService.get<boolean>('database.dropSchema'),
       factories: ['src/db/seeds/factories/**/*{.ts,.js}'],
-      logging:
-        isDevelopment && this.configService.get<boolean>('database.debug'),
+      logging: isDevelopment && this.configService.get<boolean>('database.debug'),
 
       // SSL configuration
-      ssl: this.configService.get<boolean>('database.ssl')
-        ? { rejectUnauthorized: false }
-        : false,
+      ssl: this.configService.get<boolean>('database.ssl') ? { rejectUnauthorized: false } : false,
     };
 
     if (isTesting) {

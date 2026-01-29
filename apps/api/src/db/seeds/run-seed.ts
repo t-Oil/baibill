@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { DataSource } from 'typeorm';
 import { AppModule } from '@modules/app/app.module';
-import SystemAdminSeeder from "./seeders/system-admin.seeder";
-import MasterDepartmentSeeder from "./seeders/ms-department.seeder";
+import SystemAdminSeeder from './seeders/system-admin.seeder';
+import MasterDepartmentSeeder from './seeders/ms-department.seeder';
 import { UserEntity } from '@entities/user.entity';
 import { MenuEntity } from '@entities/menu.entity';
 import MenuSeeder from './seeders/menu.seeder';
@@ -25,8 +25,7 @@ async function bootstrap() {
     const userSeeder = new SystemAdminSeeder();
     const users: UserEntity[] = await userSeeder.run(dataSource);
 
-    const adminUser =
-      users.find((user) => user.email === 'system@brandi.com') || users[0];
+    const adminUser = users.find((user) => user.email === 'system@brandi.com') || users[0];
     const createdById = adminUser?.id;
 
     const msDepartment = new MasterDepartmentSeeder();
@@ -53,7 +52,6 @@ async function bootstrap() {
     const emailTemplates = new EmailTemplateSeeder();
     // Use factory manager as null/any since we're running manually and not using factories
     await emailTemplates.run(dataSource, null as any);
-
   } catch (error) {
     console.error('Error during seed execution:', error);
   } finally {

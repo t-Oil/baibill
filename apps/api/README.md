@@ -62,6 +62,7 @@ cp .env.example .env
 # Edit .env with your database credentials
 nano .env
 ```
+
 ### 3. Run Migrations
 
 ```bash
@@ -80,6 +81,7 @@ npm run seed
 ```
 
 This will populate the database with:
+
 - Default roles
 - Default permissions
 - Sample users
@@ -181,6 +183,7 @@ npm run test:e2e
 # Debug tests
 npm run test:debug
 ```
+
 ---
 
 ## Project Structure
@@ -233,7 +236,6 @@ modules/user/
     └── user.resource.ts
 ```
 
-
 ## Testing
 
 ### Unit Tests
@@ -265,6 +267,7 @@ npm run test:e2e
 # Run specific e2e test
 npm run test:e2e -- auth.e2e-spec.ts
 ```
+
 ---
 
 ### Health Check

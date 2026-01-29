@@ -1,6 +1,14 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, useRef, ReactNode, useCallback } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+  ReactNode,
+  useCallback,
+} from 'react';
 
 /**
  * Cookie name for organization UID (accessible by Next.js server).

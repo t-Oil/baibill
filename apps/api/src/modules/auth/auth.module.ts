@@ -14,13 +14,7 @@ import { UserModule } from '@modules/user/user.module';
 @Module({
   imports: [JwtModule, LoggerModule, UserModule],
   controllers: [AuthController, MeController],
-  providers: [
-    AuthService,
-    MeService,
-    UserRepository,
-    OauthRepository,
-    MenuRepository
-  ],
-  exports: [MeService]
+  providers: [AuthService, MeService, UserRepository, OauthRepository, MenuRepository],
+  exports: [MeService],
 })
-export class AuthModule { }
+export class AuthModule {}

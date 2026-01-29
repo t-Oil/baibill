@@ -12,9 +12,7 @@ import { ModuleRef } from '@nestjs/core';
 
 @ValidatorConstraint({ async: true })
 @Injectable()
-export class IsDuplicateFieldConstraint
-  implements ValidatorConstraintInterface
-{
+export class IsDuplicateFieldConstraint implements ValidatorConstraintInterface {
   constructor(private moduleRef: ModuleRef) {}
 
   async validate(value: any, args: ValidationArguments): Promise<boolean> {

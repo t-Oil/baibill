@@ -122,9 +122,7 @@ export class CreateMenusTable1729160000002 implements MigrationInterface {
     await queryRunner.query(`DROP INDEX "IDX_menus_uid"`);
 
     const table = await queryRunner.getTable('menus');
-    const foreignKey = table.foreignKeys.find(
-      (fk) => fk.columnNames.indexOf('parent_id') !== -1,
-    );
+    const foreignKey = table.foreignKeys.find((fk) => fk.columnNames.indexOf('parent_id') !== -1);
     if (foreignKey) {
       await queryRunner.dropForeignKey('menus', foreignKey);
     }

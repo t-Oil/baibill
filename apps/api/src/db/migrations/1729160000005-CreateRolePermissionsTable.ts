@@ -4,9 +4,7 @@ import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm
  * Migration: Create role_permissions pivot table
  * This table manages many-to-many relationship between roles and permissions
  */
-export class CreateRolePermissionsTable1729160000005
-  implements MigrationInterface
-{
+export class CreateRolePermissionsTable1729160000005 implements MigrationInterface {
   name = 'CreateRolePermissionsTable1729160000005';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -61,17 +59,13 @@ export class CreateRolePermissionsTable1729160000005
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `DROP INDEX "IDX_role_permissions_permission_id"`,
-    );
+    await queryRunner.query(`DROP INDEX "IDX_role_permissions_permission_id"`);
     await queryRunner.query(`DROP INDEX "IDX_role_permissions_role_id"`);
 
     const table = await queryRunner.getTable('role_permissions');
 
     // Drop foreign keys
-    const roleForeignKey = table.foreignKeys.find(
-      (fk) => fk.columnNames.indexOf('role_id') !== -1,
-    );
+    const roleForeignKey = table.foreignKeys.find((fk) => fk.columnNames.indexOf('role_id') !== -1);
     if (roleForeignKey) {
       await queryRunner.dropForeignKey('role_permissions', roleForeignKey);
     }

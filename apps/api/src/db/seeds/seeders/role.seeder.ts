@@ -5,10 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { RoleEntity } from '@entities/role.entity';
 
 export default class RoleSeeder implements Seeder {
-  public async run(
-    dataSource: DataSource,
-    createdById?: number,
-  ): Promise<void> {
+  public async run(dataSource: DataSource, createdById?: number): Promise<void> {
     const repository = dataSource.getRepository(RoleEntity);
 
     const count = await repository.count();
@@ -38,6 +35,5 @@ export default class RoleSeeder implements Seeder {
     ];
 
     await repository.insert(created);
-
   }
 }

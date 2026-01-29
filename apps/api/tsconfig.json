@@ -13,42 +13,18 @@
     "incremental": true,
     "skipLibCheck": true,
     "paths": {
-      "@decorators/*": [
-        "modules/decorators/*"
-      ],
-      "@modules/*": [
-        "modules/*"
-      ],
-      "@constants/*": [
-        "constants/*"
-      ],
-      "@configs/*": [
-        "configs/*"
-      ],
-      "@exceptions/*": [
-        "exceptions/*"
-      ],
-      "@repositories/*": [
-        "repositories/*"
-      ],
-      "@entities/*": [
-        "entities/*"
-      ],
-      "@interceptors/*": [
-        "interceptors/*"
-      ],
-      "@resources/*": [
-        "commons/resources/*"
-      ],
-      "@middlewares/*": [
-        "middlewares/*"
-      ],
-      "@commons/*": [
-        "commons/*"
-      ],
-      "@interfaces/*": [
-        "interfaces/*"
-      ]
+      "@decorators/*": ["modules/decorators/*"],
+      "@modules/*": ["modules/*"],
+      "@constants/*": ["constants/*"],
+      "@configs/*": ["configs/*"],
+      "@exceptions/*": ["exceptions/*"],
+      "@repositories/*": ["repositories/*"],
+      "@entities/*": ["entities/*"],
+      "@interceptors/*": ["interceptors/*"],
+      "@resources/*": ["commons/resources/*"],
+      "@middlewares/*": ["middlewares/*"],
+      "@commons/*": ["commons/*"],
+      "@interfaces/*": ["interfaces/*"]
     }
   },
   "strictNullChecks": false,

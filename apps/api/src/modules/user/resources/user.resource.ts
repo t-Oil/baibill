@@ -15,7 +15,7 @@ export class UserDto extends BaseResourceDto {
 
   @Expose()
   @Type(() => DepartmentDto)
-  department: DepartmentDto
+  department: DepartmentDto;
 }
 
 export class UserResource extends ResourceWithPaginateDto {

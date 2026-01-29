@@ -16,12 +16,9 @@ import { OrganizationRoleRepository } from '@repositories/organization-role.repo
 import { OrganizationInvitationRepository } from '@repositories/organization-invitation.repository';
 import { InvitationStatus } from '@entities/organization-invitation.entity';
 import { v4 as uuidv4 } from 'uuid';
-
-import { MailService } from '@modules/mail/mail.service';
 import { RegisterRequest } from '@modules/auth/requests/register.request';
-import { EmailTemplateType } from '@entities/email-template.entity';
-
-// ... existing imports ...
+import { EmailConfirmationEvent } from '@modules/mail/events/mail.events';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class UserService {
@@ -36,8 +33,8 @@ export class UserService {
     private readonly roleRepository: OrganizationRoleRepository,
     @InjectRepository(OrganizationInvitationRepository)
     private readonly invitationRepository: OrganizationInvitationRepository,
-    private readonly mailService: MailService,
-  ) { }
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   /**
    * Paginates users with optional search and filtering.
@@ -109,29 +106,22 @@ export class UserService {
 
       const savedUser = await this.userRepository.save(created);
 
-      // Create default organization
       await this.createDefaultOrganization(savedUser);
 
-      // Link email-based invitations
       await this.linkUserToEmailInvitations(savedUser.email, savedUser.id);
 
-      // Send confirmation email
-      if (this.mailService.isMailEnabled()) {
-        await this.mailService.sendWithTemplate(
-          EmailTemplateType.EMAIL_CONFIRMATION,
-          { email: savedUser.email, name: savedUser.firstName },
-          {
-            name: savedUser.firstName,
-            link: `${process.env.FRONTEND_APP_URL}/verify-email?token=${savedUser.confirmationToken}`
-          }
-        ).catch(err => console.error('Failed to send confirmation email:', err));
-      }
+      this.eventEmitter.emit(
+        EmailConfirmationEvent.NAME,
+        new EmailConfirmationEvent(
+          savedUser.email,
+          savedUser.firstName,
+          `${process.env.FRONTEND_APP_URL}/verify-email?token=${savedUser.confirmationToken}`,
+        ),
+      );
 
       return savedUser;
     } catch (error) {
-      throw UserException.createError([
-        'Something went wrong when registering user',
-      ]);
+      throw UserException.createError(['Something went wrong when registering user']);
     }
   }
 
@@ -157,13 +147,8 @@ export class UserService {
 
       const savedUser = await this.userRepository.save(created);
 
-      // Create default organization
       await this.createDefaultOrganization(savedUser);
 
-      // Link email-based invitations
-      await this.linkUserToEmailInvitations(savedUser.email, savedUser.id);
-
-      // Get pending invitations
       const pendingInvitations = await this.invitationRepository.find({
         where: {
           userId: savedUser.id,
@@ -177,9 +162,7 @@ export class UserService {
         pendingInvitations,
       };
     } catch (error) {
-      throw UserException.createError([
-        'Something went wrong when creating user',
-      ]);
+      throw UserException.createError(['Something went wrong when creating user']);
     }
   }
 
@@ -205,7 +188,7 @@ export class UserService {
         userId: user.id,
         organizationId: savedOrg.id,
         roleId: adminRole.id,
-        invitedBy: user.id, // User invited themselves basically
+        invitedBy: user.id,
       });
       await this.userOrganizationRepository.save(membership);
     }
@@ -253,10 +236,7 @@ export class UserService {
    * @param payload Update data
    * @returns Updated user
    */
-  async update(
-    uid: string,
-    payload: UpdateUserRequestDto,
-  ): Promise<UserEntity> {
+  async update(uid: string, payload: UpdateUserRequestDto): Promise<UserEntity> {
     const user = await this.getById(uid);
 
     try {
@@ -270,9 +250,7 @@ export class UserService {
 
       return this.getById(updatedUser.uid, 'department');
     } catch (error) {
-      throw UserException.updateError([
-        'Something went wrong when updating user',
-      ]);
+      throw UserException.updateError(['Something went wrong when updating user']);
     }
   }
 }

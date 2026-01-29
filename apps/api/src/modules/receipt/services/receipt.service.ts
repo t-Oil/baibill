@@ -113,10 +113,16 @@ export class ReceiptService {
       await this.checkDuplicate(parsed.receiptNo, organizationId);
 
       // 4. Create and save receipt entity
-      const saved = await this.createAndSaveReceipt(parsed, ocrText, file.filename, organizationId, uploadedById);
+      const saved = await this.createAndSaveReceipt(
+        parsed,
+        ocrText,
+        file.filename,
+        organizationId,
+        uploadedById,
+      );
 
       this.logger.log(
-        `Receipt processed successfully (id: ${saved.uid}, method: ${parsingMethod}, merchant: ${saved.merchantName}, total: ${saved.totalAmount}, org: ${orgUid || 'none'})`
+        `Receipt processed successfully (id: ${saved.uid}, method: ${parsingMethod}, merchant: ${saved.merchantName}, total: ${saved.totalAmount}, org: ${orgUid || 'none'})`,
       );
 
       return saved;
@@ -157,7 +163,7 @@ export class ReceiptService {
 
     if (aiResult && this.isAiResultValid(aiResult)) {
       this.logger.log(
-        `AI parsing successful (confidence: ${aiResult.confidence}, model: ${metadata.model}, version: ${metadata.promptVersion})`
+        `AI parsing successful (confidence: ${aiResult.confidence}, model: ${metadata.model}, version: ${metadata.promptVersion})`,
       );
 
       return {
@@ -240,11 +246,9 @@ export class ReceiptService {
 
     if (existingReceipt) {
       this.logger.log(
-        `Duplicate receipt number detected: ${receiptNo} (existing: ${existingReceipt.uid})`
+        `Duplicate receipt number detected: ${receiptNo} (existing: ${existingReceipt.uid})`,
       );
-      ReceiptException.duplicateError([
-        `Duplicate receipt number: ${receiptNo} already exists`,
-      ]);
+      ReceiptException.duplicateError([`Duplicate receipt number: ${receiptNo} already exists`]);
     }
   }
 
@@ -321,7 +325,7 @@ export class ReceiptService {
     throw new ApiException(
       200002,
       [`Failed to process receipt: ${error.message}`],
-      HttpStatus.INTERNAL_SERVER_ERROR
+      HttpStatus.INTERNAL_SERVER_ERROR,
     );
   }
 
@@ -372,7 +376,7 @@ export class ReceiptService {
       if (search) {
         queryBuilder.andWhere(
           '(receipt.merchantName ILIKE :search OR receipt.receiptNo ILIKE :search)',
-          { search: `%${search}%` }
+          { search: `%${search}%` },
         );
       }
 
@@ -388,9 +392,7 @@ export class ReceiptService {
         },
       };
     } catch (error) {
-      throw ReceiptException.createError([
-        `Failed to fetch receipts: ${error.message}`,
-      ]);
+      throw ReceiptException.createError([`Failed to fetch receipts: ${error.message}`]);
     }
   }
 
@@ -427,7 +429,7 @@ export class ReceiptService {
       if (search) {
         queryBuilder.andWhere(
           '(receipt.merchantName ILIKE :search OR receipt.receiptNo ILIKE :search)',
-          { search: `%${search}%` }
+          { search: `%${search}%` },
         );
       }
 
@@ -471,18 +473,16 @@ export class ReceiptService {
       let filename: string;
 
       if (format === 'csv') {
-        buffer = await workbook.csv.writeBuffer() as Buffer;
+        buffer = (await workbook.csv.writeBuffer()) as Buffer;
         filename = `receipts-${timestamp}.csv`;
       } else {
-        buffer = await workbook.xlsx.writeBuffer() as Buffer;
+        buffer = (await workbook.xlsx.writeBuffer()) as Buffer;
         filename = `receipts-${timestamp}.xlsx`;
       }
 
       return { buffer, filename };
     } catch (error) {
-      throw ReceiptException.createError([
-        `Failed to export receipts: ${error.message}`,
-      ]);
+      throw ReceiptException.createError([`Failed to export receipts: ${error.message}`]);
     }
   }
 
@@ -559,9 +559,7 @@ export class ReceiptService {
         averageAmount,
       };
     } catch (error) {
-      throw ReceiptException.createError([
-        `Failed to fetch stats: ${error.message}`,
-      ]);
+      throw ReceiptException.createError([`Failed to fetch stats: ${error.message}`]);
     }
   }
 }

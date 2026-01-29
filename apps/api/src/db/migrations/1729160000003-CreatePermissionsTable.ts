@@ -94,9 +94,7 @@ export class CreatePermissionsTable1729160000003 implements MigrationInterface {
     await queryRunner.query(`DROP INDEX "IDX_permissions_uid"`);
 
     const table = await queryRunner.getTable('permissions');
-    const foreignKey = table.foreignKeys.find(
-      (fk) => fk.columnNames.indexOf('menu_id') !== -1,
-    );
+    const foreignKey = table.foreignKeys.find((fk) => fk.columnNames.indexOf('menu_id') !== -1);
     if (foreignKey) {
       await queryRunner.dropForeignKey('permissions', foreignKey);
     }

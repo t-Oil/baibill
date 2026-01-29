@@ -42,7 +42,6 @@ export class UserEntity {
   @Column({ name: 'confirmation_token_expires', type: 'timestamp', nullable: true })
   confirmationTokenExpires?: Date;
 
-
   @Column({ name: 'last_name', length: 100 })
   lastName: string;
 

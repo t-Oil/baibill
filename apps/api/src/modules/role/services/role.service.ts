@@ -21,7 +21,7 @@ export class RoleService {
     private readonly roleRepository: RoleRepository,
     @InjectRepository(PermissionRepository)
     private readonly permissionRepository: PermissionRepository,
-  ) { }
+  ) {}
 
   /**
    * Paginates roles based on search and sort options.

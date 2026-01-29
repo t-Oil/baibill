@@ -13,26 +13,31 @@ npx playwright install chromium
 ## Running Tests
 
 ### Run all tests (headless mode)
+
 ```bash
 npm run test:e2e
 ```
 
 ### Run tests with UI mode (recommended for development)
+
 ```bash
 npm run test:e2e:ui
 ```
 
 ### Run tests in headed mode (see the browser)
+
 ```bash
 npm run test:e2e:headed
 ```
 
 ### Debug tests
+
 ```bash
 npm run test:e2e:debug
 ```
 
 ### View test report
+
 ```bash
 npm run test:e2e:report
 ```
@@ -85,6 +90,7 @@ test('my new test', async ({ page }) => {
 Configuration is in [playwright.config.ts](../playwright.config.ts).
 
 Key settings:
+
 - **baseURL**: `http://localhost:3000` (configurable via `PLAYWRIGHT_BASE_URL`)
 - **webServer**: Automatically starts dev server before tests
 - **browsers**: Chromium only (add more in config if needed)
@@ -119,22 +125,28 @@ Key settings:
 ## Debugging Tips
 
 ### 1. Use UI Mode
+
 ```bash
 npm run test:e2e:ui
 ```
+
 This opens an interactive UI where you can:
+
 - See test execution step-by-step
 - Time travel through test actions
 - Inspect DOM at each step
 - View network requests
 
 ### 2. Use Debug Mode
+
 ```bash
 npm run test:e2e:debug
 ```
+
 This opens Playwright Inspector for stepping through tests.
 
 ### 3. Add Breakpoints
+
 ```typescript
 test('debug this test', async ({ page }) => {
   await page.goto('/');
@@ -143,7 +155,9 @@ test('debug this test', async ({ page }) => {
 ```
 
 ### 4. View Traces
+
 After a test failure, view the trace:
+
 ```bash
 npx playwright show-trace trace.zip
 ```
@@ -157,6 +171,7 @@ npx playwright show-trace trace.zip
 ### Issue: "Browser not found"
 
 **Solution**: Install browsers:
+
 ```bash
 npx playwright install chromium
 ```
@@ -164,6 +179,7 @@ npx playwright install chromium
 ### Issue: Dev server doesn't start
 
 **Solution**: Check that port 3000 is available or set custom port:
+
 ```bash
 PLAYWRIGHT_BASE_URL=http://localhost:3001 npm run test:e2e
 ```
@@ -171,6 +187,7 @@ PLAYWRIGHT_BASE_URL=http://localhost:3001 npm run test:e2e
 ### Issue: API calls fail in tests
 
 **Solution**: Mock API responses using `page.route()`:
+
 ```typescript
 await page.route('**/api/**', async (route) => {
   await route.fulfill({

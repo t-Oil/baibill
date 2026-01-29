@@ -166,8 +166,18 @@ export default function OrganizationsPage() {
           ) : pendingInvitations.length > 0 ? (
             <div className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-xl p-6">
               <div className="flex items-center mb-4">
-                <svg className="w-6 h-6 text-amber-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                <svg
+                  className="w-6 h-6 text-amber-500 mr-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
                 </svg>
                 <h2 className="text-xl font-semibold text-[var(--text)]">
                   Pending Invitations ({pendingInvitations.length})
@@ -188,7 +198,10 @@ export default function OrganizationsPage() {
                           {invitation.organization?.name || 'Unknown Organization'}
                         </h3>
                         <p className="text-sm text-[var(--muted)]">
-                          Role: <span className="capitalize font-medium text-[var(--text)]">{invitation.role?.name || 'member'}</span>
+                          Role:{' '}
+                          <span className="capitalize font-medium text-[var(--text)]">
+                            {invitation.role?.name || 'member'}
+                          </span>
                         </p>
                         <p className="text-sm text-[var(--muted)]">
                           Invited by: {getInviterName(invitation.inviter)}
@@ -227,19 +240,21 @@ export default function OrganizationsPage() {
                     type="text"
                     {...register('name')}
                     className={`mt-1 block w-full rounded-md border bg-[var(--bg)] px-3 py-2 text-[var(--text)] focus:ring-2 focus:ring-[var(--button-primary)] focus:outline-none ${
-                        errors.name ? 'border-[var(--error)]' : 'border-[var(--border)]'
+                      errors.name ? 'border-[var(--error)]' : 'border-[var(--border)]'
                     }`}
                   />
-                   {errors.name && (
+                  {errors.name && (
                     <p className="mt-1 text-sm text-[var(--error)]">{errors.name.message}</p>
                   )}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-[var(--text)]">Description</label>
+                  <label className="block text-sm font-medium text-[var(--text)]">
+                    Description
+                  </label>
                   <textarea
                     {...register('description')}
-                     className={`mt-1 block w-full rounded-md border bg-[var(--bg)] px-3 py-2 text-[var(--text)] focus:ring-2 focus:ring-[var(--button-primary)] focus:outline-none ${
-                        errors.description ? 'border-[var(--error)]' : 'border-[var(--border)]'
+                    className={`mt-1 block w-full rounded-md border bg-[var(--bg)] px-3 py-2 text-[var(--text)] focus:ring-2 focus:ring-[var(--button-primary)] focus:outline-none ${
+                      errors.description ? 'border-[var(--error)]' : 'border-[var(--border)]'
                     }`}
                   />
                   {errors.description && (
@@ -251,9 +266,9 @@ export default function OrganizationsPage() {
                   <button
                     type="button"
                     onClick={() => {
-                        setIsCreating(false);
-                        reset();
-                        setServerError('');
+                      setIsCreating(false);
+                      reset();
+                      setServerError('');
                     }}
                     className="px-4 py-2 text-[var(--text)] hover:bg-[var(--bg)] rounded-lg transition-colors"
                   >
@@ -265,13 +280,13 @@ export default function OrganizationsPage() {
                     className="px-4 py-2 bg-[var(--button-primary)] text-white rounded-lg hover:bg-[var(--button-hover)] transition-colors disabled:opacity-50"
                   >
                     {isSubmitting ? (
-                        <span className="flex items-center gap-2">
-                          <LoadingSpinner size="sm" color="white" />
-                          Creating...
-                        </span>
-                      ) : (
-                        'Create'
-                      )}
+                      <span className="flex items-center gap-2">
+                        <LoadingSpinner size="sm" color="white" />
+                        Creating...
+                      </span>
+                    ) : (
+                      'Create'
+                    )}
                   </button>
                 </div>
               </form>
@@ -299,8 +314,18 @@ export default function OrganizationsPage() {
                 <div className="flex justify-between items-center">
                   {currentOrg?.uid === org.uid ? (
                     <span className="flex items-center text-sm font-medium text-[var(--success)]">
-                      <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      <svg
+                        className="w-4 h-4 mr-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
                       </svg>
                       Current Organization
                     </span>

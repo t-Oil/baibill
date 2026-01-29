@@ -37,8 +37,16 @@ export default () => ({
 
   upload: {
     maxFileSize: parseInt(process.env.MAX_FILE_SIZE, 10) || 10485760,
-    allowedMimeTypes: (process.env.ALLOWED_MIME_TYPES || 'image/jpeg,image/png,image/jpg').split(','),
+    allowedMimeTypes: (process.env.ALLOWED_MIME_TYPES || 'image/jpeg,image/png,image/jpg').split(
+      ',',
+    ),
     tempDir: process.env.UPLOAD_TEMP_DIR || './tmp/uploads',
+  },
+  mail: {
+    apiKey: process.env.MAILJET_API_KEY,
+    apiSecret: process.env.MAILJET_API_SECRET,
+    fromEmail: process.env.MAIL_FROM_EMAIL || 'noreply@example.com',
+    fromName: process.env.MAIL_FROM_NAME || 'Receipt OCR',
   },
   openai: {
     apiKey: process.env.OPENAI_API_KEY,

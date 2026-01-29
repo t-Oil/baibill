@@ -44,14 +44,16 @@ test.describe('Receipt Upload', () => {
         contentType: 'application/json',
         body: JSON.stringify({
           status: { code: 200, message: 'OK' },
-          data: [{
-            organization: {
-              id: 1,
-              uid: 'org-123',
-              name: 'Test Organization',
+          data: [
+            {
+              organization: {
+                id: 1,
+                uid: 'org-123',
+                name: 'Test Organization',
+              },
+              role: { id: 1, name: 'admin' },
             },
-            role: { id: 1, name: 'admin' },
-          }],
+          ],
         }),
       });
     });
@@ -153,12 +155,16 @@ test.describe('Receipt Upload', () => {
     await fileInput.setInputFiles(testImagePath);
 
     // Wait for the results to appear (Receipt Details is an h2 heading)
-    await expect(page.getByRole('heading', { name: /receipt details/i })).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole('heading', { name: /receipt details/i })).toBeVisible({
+      timeout: 10000,
+    });
 
     // Verify success message with merchant name is displayed
-    await expect(page.getByText(/receipt processed successfully.*walmart/i)).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText(/receipt processed successfully.*walmart/i)).toBeVisible({
+      timeout: 10000,
+    });
 
-    // Verify the total amount is displayed (use first() since it appears in both card and raw OCR) 
+    // Verify the total amount is displayed (use first() since it appears in both card and raw OCR)
     await expect(page.getByText(/45\.67/).first()).toBeVisible({ timeout: 5000 });
   });
 

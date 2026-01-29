@@ -8,7 +8,7 @@ import { UserOrganizationEntity } from '@entities/user-organization.entity';
  */
 @Injectable()
 export class UserOrganizationRepository extends BaseRepository<UserOrganizationEntity> {
-    constructor(private dataSource: DataSource) {
-        super(UserOrganizationEntity, dataSource.createEntityManager());
-    }
+  constructor(private dataSource: DataSource) {
+    super(UserOrganizationEntity, dataSource.createEntityManager());
+  }
 }

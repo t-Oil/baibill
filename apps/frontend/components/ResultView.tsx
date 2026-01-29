@@ -69,11 +69,13 @@ export function ResultView({ data }: ResultViewProps) {
         {data.vatIncluded !== undefined && (
           <div className="bg-[var(--bg)] rounded-lg p-4 border border-[var(--border)]">
             <p className="text-sm text-[var(--muted)]">VAT Status</p>
-            <span className={`inline-flex px-2 py-1 text-sm font-medium rounded-full ${
-              data.vatIncluded
-                ? 'bg-[var(--success)]/10 text-[var(--success)]'
-                : 'bg-[var(--muted)]/10 text-[var(--muted)]'
-            }`}>
+            <span
+              className={`inline-flex px-2 py-1 text-sm font-medium rounded-full ${
+                data.vatIncluded
+                  ? 'bg-[var(--success)]/10 text-[var(--success)]'
+                  : 'bg-[var(--muted)]/10 text-[var(--muted)]'
+              }`}
+            >
               {data.vatIncluded ? 'VAT Included' : 'VAT Excluded'}
             </span>
           </div>
@@ -88,18 +90,24 @@ export function ResultView({ data }: ResultViewProps) {
             {data.subtotal !== undefined && data.subtotal > 0 && (
               <div className="flex justify-between text-[var(--muted)]">
                 <span>Subtotal</span>
-                <span className="text-[var(--text)]">{formatCurrency(data.subtotal, data.currency)}</span>
+                <span className="text-[var(--text)]">
+                  {formatCurrency(data.subtotal, data.currency)}
+                </span>
               </div>
             )}
             {data.vatAmount !== undefined && data.vatAmount > 0 && (
               <div className="flex justify-between text-[var(--muted)]">
                 <span>VAT</span>
-                <span className="text-[var(--text)]">{formatCurrency(data.vatAmount, data.currency)}</span>
+                <span className="text-[var(--text)]">
+                  {formatCurrency(data.vatAmount, data.currency)}
+                </span>
               </div>
             )}
             <div className="flex justify-between text-[var(--text)] font-semibold border-t border-[var(--border)] pt-2">
               <span>Total</span>
-              <span className="text-[var(--success)]">{formatCurrency(data.totalAmount, data.currency)}</span>
+              <span className="text-[var(--success)]">
+                {formatCurrency(data.totalAmount, data.currency)}
+              </span>
             </div>
           </div>
         </div>
@@ -108,7 +116,9 @@ export function ResultView({ data }: ResultViewProps) {
       {/* Line Items */}
       {data.lineItems && data.lineItems.length > 0 && (
         <div className="bg-[var(--bg)] rounded-lg p-4 border border-[var(--border)]">
-          <h3 className="font-semibold text-[var(--text)] mb-3">Line Items ({data.lineItems.length})</h3>
+          <h3 className="font-semibold text-[var(--text)] mb-3">
+            Line Items ({data.lineItems.length})
+          </h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -125,7 +135,9 @@ export function ResultView({ data }: ResultViewProps) {
                     <td className="py-2 pr-4 text-[var(--text)]">
                       {item.description}
                       {item.productCode && (
-                        <span className="block text-xs text-[var(--muted)]">{item.productCode}</span>
+                        <span className="block text-xs text-[var(--muted)]">
+                          {item.productCode}
+                        </span>
                       )}
                     </td>
                     <td className="py-2 px-2 text-right text-[var(--muted)]">{item.quantity}</td>

@@ -43,7 +43,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   }, [theme, mounted]);
 
   const toggleTheme = () => {
-    setThemeState(prev => prev === 'light' ? 'dark' : 'light');
+    setThemeState((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
   const setTheme = (newTheme: Theme) => {

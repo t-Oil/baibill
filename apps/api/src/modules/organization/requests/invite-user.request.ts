@@ -5,17 +5,17 @@ import { IsNotEmpty, IsNumber, IsEmail, ValidateIf } from 'class-validator';
  * Either userId OR email must be provided (not both required).
  */
 export class InviteUserRequest {
-    @ValidateIf(o => !o.email)
-    @IsNotEmpty({ message: 'Either userId or email is required' })
-    @IsNumber()
-    userId?: number;
+  @ValidateIf((o) => !o.email)
+  @IsNotEmpty({ message: 'Either userId or email is required' })
+  @IsNumber()
+  userId?: number;
 
-    @ValidateIf(o => !o.userId)
-    @IsNotEmpty({ message: 'Either userId or email is required' })
-    @IsEmail({}, { message: 'Must be a valid email address' })
-    email?: string;
+  @ValidateIf((o) => !o.userId)
+  @IsNotEmpty({ message: 'Either userId or email is required' })
+  @IsEmail({}, { message: 'Must be a valid email address' })
+  email?: string;
 
-    @IsNotEmpty()
-    @IsNumber()
-    roleId: number;
+  @IsNotEmpty()
+  @IsNumber()
+  roleId: number;
 }

@@ -14,8 +14,7 @@ export class MenuRepository extends BaseRepository<MenuEntity> {
   async getMenusInRole(user: UserEntity): Promise<MenuEntity[]> {
     const menuIds: number[] =
       user.roles?.flatMap(
-        (role) =>
-          role.permissions?.map((permission) => permission.menuId) || [],
+        (role) => role.permissions?.map((permission) => permission.menuId) || [],
       ) || [];
 
     if (menuIds.length === 0) {
@@ -63,9 +62,7 @@ export class MenuRepository extends BaseRepository<MenuEntity> {
       select: ['parentId'],
     });
 
-    return parents
-      .map((m) => m.parentId)
-      .filter((id): id is number => id !== null);
+    return parents.map((m) => m.parentId).filter((id): id is number => id !== null);
   }
 
   private flattenMenuIds(menus: MenuEntity[]): number[] {

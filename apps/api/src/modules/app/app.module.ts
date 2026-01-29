@@ -22,6 +22,7 @@ import { RoleModule } from '@modules/role/role.module';
 import { ReceiptModule } from '@modules/receipt/receipt.module';
 import { OrganizationModule } from '@modules/organization/organization.module';
 import { MailModule } from '@modules/mail/mail.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { MailModule } from '@modules/mail/mail.module';
       isGlobal: true,
       ttl: 5000,
     }),
+    EventEmitterModule.forRoot(),
     JwtModule,
     LoggerModule,
     MailModule,
@@ -64,4 +66,4 @@ import { MailModule } from '@modules/mail/mail.module';
     OauthRepository,
   ],
 })
-export class AppModule { }
+export class AppModule {}

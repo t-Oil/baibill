@@ -111,17 +111,39 @@ export default function ReceiptDetailPage() {
         <DashboardLayout>
           <div className="max-w-4xl mx-auto">
             <div className="bg-[var(--error)]/10 border border-[var(--error)]/30 rounded-xl p-6 text-center">
-              <svg className="mx-auto h-12 w-12 text-[var(--error)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              <svg
+                className="mx-auto h-12 w-12 text-[var(--error)]"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
               </svg>
-              <h3 className="mt-4 text-lg font-medium text-[var(--error)]">{error || 'Receipt not found'}</h3>
+              <h3 className="mt-4 text-lg font-medium text-[var(--error)]">
+                {error || 'Receipt not found'}
+              </h3>
               <div className="mt-6">
                 <Link
                   href="/receipts"
                   className="inline-flex items-center px-4 py-2 bg-[var(--surface)] text-[var(--text)] border border-[var(--border)] rounded-lg hover:bg-[var(--bg)] transition-colors"
                 >
-                  <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                    />
                   </svg>
                   Back to Receipts
                 </Link>
@@ -145,7 +167,12 @@ export default function ReceiptDetailPage() {
                 className="inline-flex items-center text-sm text-[var(--muted)] hover:text-[var(--button-primary)] transition-colors mb-2"
               >
                 <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
                 </svg>
                 Back to Receipts
               </Link>
@@ -174,11 +201,13 @@ export default function ReceiptDetailPage() {
 
             <div className="bg-[var(--surface)] rounded-xl p-4 border border-[var(--border)] transition-colors duration-200">
               <p className="text-sm text-[var(--muted)]">VAT Status</p>
-              <span className={`inline-flex px-2 py-1 text-sm font-medium rounded-full ${
-                receipt.vatIncluded
-                  ? 'bg-[var(--success)]/10 text-[var(--success)]'
-                  : 'bg-[var(--muted)]/10 text-[var(--muted)]'
-              }`}>
+              <span
+                className={`inline-flex px-2 py-1 text-sm font-medium rounded-full ${
+                  receipt.vatIncluded
+                    ? 'bg-[var(--success)]/10 text-[var(--success)]'
+                    : 'bg-[var(--muted)]/10 text-[var(--muted)]'
+                }`}
+              >
                 {receipt.vatIncluded ? 'VAT Included' : 'VAT Excluded'}
               </span>
             </div>
@@ -199,7 +228,9 @@ export default function ReceiptDetailPage() {
 
             <div className="bg-[var(--surface)] rounded-xl p-4 border border-[var(--border)] transition-colors duration-200">
               <p className="text-sm text-[var(--muted)]">Uploaded</p>
-              <p className="text-lg font-medium text-[var(--text)]">{formatDateTime(receipt.createdAt)}</p>
+              <p className="text-lg font-medium text-[var(--text)]">
+                {formatDateTime(receipt.createdAt)}
+              </p>
             </div>
           </div>
 
@@ -211,18 +242,24 @@ export default function ReceiptDetailPage() {
                 {receipt.subtotal && receipt.subtotal > 0 && (
                   <div className="flex justify-between text-[var(--muted)]">
                     <span>Subtotal</span>
-                    <span className="text-[var(--text)]">{formatCurrency(receipt.subtotal, receipt.currency)}</span>
+                    <span className="text-[var(--text)]">
+                      {formatCurrency(receipt.subtotal, receipt.currency)}
+                    </span>
                   </div>
                 )}
                 {receipt.vatAmount && receipt.vatAmount > 0 && (
                   <div className="flex justify-between text-[var(--muted)]">
                     <span>VAT (7%)</span>
-                    <span className="text-[var(--text)]">{formatCurrency(receipt.vatAmount, receipt.currency)}</span>
+                    <span className="text-[var(--text)]">
+                      {formatCurrency(receipt.vatAmount, receipt.currency)}
+                    </span>
                   </div>
                 )}
                 <div className="flex justify-between text-[var(--text)] font-semibold border-t border-[var(--border)] pt-3">
                   <span>Total</span>
-                  <span className="text-[var(--success)] text-xl">{formatCurrency(receipt.totalAmount, receipt.currency)}</span>
+                  <span className="text-[var(--success)] text-xl">
+                    {formatCurrency(receipt.totalAmount, receipt.currency)}
+                  </span>
                 </div>
               </div>
             </div>
@@ -246,7 +283,10 @@ export default function ReceiptDetailPage() {
                   </thead>
                   <tbody>
                     {receipt.lineItems.map((item, index) => (
-                      <tr key={item.id || index} className="border-b border-[var(--border)]/50 hover:bg-[var(--bg)] transition-colors">
+                      <tr
+                        key={item.id || index}
+                        className="border-b border-[var(--border)]/50 hover:bg-[var(--bg)] transition-colors"
+                      >
                         <td className="py-3 pr-4">
                           <span className="text-[var(--text)]">{item.description}</span>
                           {item.productCode && (
@@ -269,7 +309,10 @@ export default function ReceiptDetailPage() {
                   </tbody>
                   <tfoot>
                     <tr className="border-t border-[var(--border)]">
-                      <td colSpan={3} className="py-3 pr-4 text-right font-semibold text-[var(--text)]">
+                      <td
+                        colSpan={3}
+                        className="py-3 pr-4 text-right font-semibold text-[var(--text)]"
+                      >
                         Total
                       </td>
                       <td className="py-3 pl-4 text-right font-bold text-[var(--success)] text-lg">

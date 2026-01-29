@@ -6,18 +6,15 @@ import { EmailTemplateEntity, EmailTemplateType } from '@entities/email-template
  * Seeder for initial email templates.
  */
 export default class EmailTemplateSeeder implements Seeder {
-    public async run(
-        dataSource: DataSource,
-        factoryManager: SeederFactoryManager,
-    ): Promise<void> {
-        const repository = dataSource.getRepository(EmailTemplateEntity);
+  public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<void> {
+    const repository = dataSource.getRepository(EmailTemplateEntity);
 
-        const templates = [
-            {
-                type: EmailTemplateType.INVITATION,
-                name: 'Organization Invitation',
-                subject: "You've been invited to join {{organizationName}}",
-                htmlContent: `
+    const templates = [
+      {
+        type: EmailTemplateType.INVITATION,
+        name: 'Organization Invitation',
+        subject: "You've been invited to join {{organizationName}}",
+        htmlContent: `
 <!DOCTYPE html>
 <html>
 <head>
@@ -70,7 +67,7 @@ export default class EmailTemplateSeeder implements Seeder {
 </body>
 </html>
                 `,
-                textContent: `
+        textContent: `
 You've been invited to join {{organizationName}}
 
 Hi there,
@@ -82,13 +79,13 @@ Click the link below to accept the invitation:
 
 If you didn't expect this invitation, you can safely ignore this email.
                 `,
-                variables: ['organizationName', 'inviterName', 'roleName', 'inviteLink'],
-            },
-            {
-                type: EmailTemplateType.WELCOME,
-                name: 'Welcome Email',
-                subject: 'Welcome to Receipt OCR!',
-                htmlContent: `
+        variables: ['organizationName', 'inviterName', 'roleName', 'inviteLink'],
+      },
+      {
+        type: EmailTemplateType.WELCOME,
+        name: 'Welcome Email',
+        subject: 'Welcome to Receipt OCR!',
+        htmlContent: `
 <!DOCTYPE html>
 <html>
 <head>
@@ -124,29 +121,27 @@ If you didn't expect this invitation, you can safely ignore this email.
 </body>
 </html>
                 `,
-                textContent: `
+        textContent: `
 Welcome to Receipt OCR, {{firstName}}! 🎉
 
 Your account has been created successfully. You can now start uploading and processing receipt images.
 
 Visit http://localhost:3000 to get started.
                 `,
-                variables: ['firstName'],
-            },
-        ];
+        variables: ['firstName'],
+      },
+    ];
 
-        for (const templateData of templates) {
-            const exists = await repository.findOne({
-                where: { type: templateData.type },
-            });
+    for (const templateData of templates) {
+      const exists = await repository.findOne({
+        where: { type: templateData.type },
+      });
 
-            if (!exists) {
-                const template = repository.create(templateData);
-                await repository.save(template);
-
-            } else {
-
-            }
-        }
+      if (!exists) {
+        const template = repository.create(templateData);
+        await repository.save(template);
+      } else {
+      }
     }
+  }
 }

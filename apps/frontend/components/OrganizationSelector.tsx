@@ -23,9 +23,7 @@ export default function OrganizationSelector() {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="h-10 w-48 bg-[var(--bg)] rounded-lg animate-pulse"></div>
-    );
+    return <div className="h-10 w-48 bg-[var(--bg)] rounded-lg animate-pulse"></div>;
   }
 
   if (organizations.length === 0) {
@@ -72,16 +70,20 @@ export default function OrganizationSelector() {
                   {org.name?.charAt(0).toUpperCase() || 'O'}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-[var(--text)] truncate">
-                    {org.name}
-                  </div>
-                  <div className="text-xs text-[var(--muted)] capitalize">
-                    {org.role?.name}
-                  </div>
+                  <div className="text-sm font-medium text-[var(--text)] truncate">{org.name}</div>
+                  <div className="text-xs text-[var(--muted)] capitalize">{org.role?.name}</div>
                 </div>
                 {currentOrg?.uid === org.uid && (
-                  <svg className="w-4 h-4 text-[var(--button-primary)]" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  <svg
+                    className="w-4 h-4 text-[var(--button-primary)]"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                 )}
               </button>

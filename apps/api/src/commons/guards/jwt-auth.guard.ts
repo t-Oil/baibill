@@ -44,9 +44,7 @@ export class JwtAuthGuard implements CanActivate {
         secret: this.jwtAccessSecret,
       });
 
-      const tokenData: OauthEntity = await this.oAuthRepository.verifyToken(
-        decoded.token,
-      );
+      const tokenData: OauthEntity = await this.oAuthRepository.verifyToken(decoded.token);
 
       if (!tokenData) {
         AuthException.Unauthorized(['Invalid or expired token']);

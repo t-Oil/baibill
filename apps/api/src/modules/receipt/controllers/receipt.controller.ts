@@ -21,7 +21,7 @@ import { OrganizationUid } from '@commons/decorators/organization.decorator';
  */
 @Controller('receipts')
 export class ReceiptController {
-  constructor(private readonly receiptService: ReceiptService) { }
+  constructor(private readonly receiptService: ReceiptService) {}
 
   /**
    * Uploads and processes a receipt image.
@@ -94,10 +94,7 @@ export class ReceiptController {
    * @returns Statistics data
    */
   @Get('stats/summary')
-  async getStats(
-    @OrganizationUid() orgUid?: string,
-    @Req() req?: any,
-  ): Promise<ApiResource> {
+  async getStats(@OrganizationUid() orgUid?: string, @Req() req?: any): Promise<ApiResource> {
     try {
       const userId = req?.user?.id;
       const response = await this.receiptService.getStats(orgUid, userId);

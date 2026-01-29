@@ -7,11 +7,6 @@ import { IsDuplicateFieldConstraint } from '@commons/validators/is-duplicate-fie
 
 @Module({
   controllers: [RoleController],
-  providers: [
-    RoleService,
-    RoleRepository,
-    PermissionRepository,
-    IsDuplicateFieldConstraint,
-  ],
+  providers: [RoleService, RoleRepository, PermissionRepository, IsDuplicateFieldConstraint],
 })
 export class RoleModule {}

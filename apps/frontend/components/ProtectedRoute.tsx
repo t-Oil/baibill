@@ -25,7 +25,6 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
     }
   }, [isAuthenticated, isLoading, router, mounted]);
 
-
   if (!mounted || isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0d1210]">

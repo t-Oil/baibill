@@ -7,10 +7,7 @@ export async function GET(request: NextRequest) {
     const token = request.headers.get('Authorization');
 
     if (!token) {
-      return NextResponse.json(
-        { status: { code: 401, message: 'Unauthorized' } },
-        { status: 401 }
-      );
+      return NextResponse.json({ status: { code: 401, message: 'Unauthorized' } }, { status: 401 });
     }
 
     const response = await fetch(`${API_URL}/api/auth/me`, {
@@ -28,7 +25,7 @@ export async function GET(request: NextRequest) {
     console.error('Me proxy error:', error);
     return NextResponse.json(
       { status: { code: 500, message: 'Failed to connect to API server' } },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

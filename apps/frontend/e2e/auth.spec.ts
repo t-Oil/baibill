@@ -193,14 +193,16 @@ test.describe('Dashboard', () => {
         contentType: 'application/json',
         body: JSON.stringify({
           status: { code: 200, message: 'OK' },
-          data: [{
-            organization: {
-              id: 1,
-              uid: 'org-123',
-              name: 'Test Organization',
+          data: [
+            {
+              organization: {
+                id: 1,
+                uid: 'org-123',
+                name: 'Test Organization',
+              },
+              role: { id: 1, name: 'admin' },
             },
-            role: { id: 1, name: 'admin' },
-          }],
+          ],
         }),
       });
     });
@@ -232,8 +234,20 @@ test.describe('Dashboard', () => {
           status: { code: 200, message: 'OK' },
           data: {
             data: [
-              { uid: 'r1', merchantName: '7-Eleven', totalAmount: 50, date: '2026-01-20', currency: 'THB' },
-              { uid: 'r2', merchantName: 'Walmart', totalAmount: 100, date: '2026-01-21', currency: 'THB' },
+              {
+                uid: 'r1',
+                merchantName: '7-Eleven',
+                totalAmount: 50,
+                date: '2026-01-20',
+                currency: 'THB',
+              },
+              {
+                uid: 'r2',
+                merchantName: 'Walmart',
+                totalAmount: 100,
+                date: '2026-01-21',
+                currency: 'THB',
+              },
             ],
             pagination: { page: 1, limit: 5, total: 2, totalPages: 1 },
           },
@@ -283,7 +297,10 @@ test.describe('Dashboard', () => {
     await expect(page.getByText(/total receipts/i)).toBeVisible({ timeout: 15000 });
 
     // Click on Receipts menu item
-    await page.getByRole('link', { name: /receipts/i }).first().click();
+    await page
+      .getByRole('link', { name: /receipts/i })
+      .first()
+      .click();
 
     // Should navigate to receipts page
     await expect(page).toHaveURL(/\/receipts/);
@@ -293,7 +310,10 @@ test.describe('Dashboard', () => {
 
   test('should navigate to upload page', async ({ page }) => {
     // Click on Upload menu item
-    await page.getByRole('link', { name: /upload/i }).first().click();
+    await page
+      .getByRole('link', { name: /upload/i })
+      .first()
+      .click();
 
     // Should navigate to upload page
     await expect(page).toHaveURL(/\/upload/);
@@ -323,7 +343,10 @@ test.describe('Dashboard', () => {
     await expect(sidebar).toBeVisible();
 
     // Find and click toggle button (look for the chevron/arrow icon)
-    const toggleButton = page.locator('button').filter({ has: page.locator('svg') }).last();
+    const toggleButton = page
+      .locator('button')
+      .filter({ has: page.locator('svg') })
+      .last();
     await toggleButton.click();
 
     // Sidebar should still be visible but collapsed (narrower)
@@ -376,10 +399,12 @@ test.describe('Receipts List', () => {
         contentType: 'application/json',
         body: JSON.stringify({
           status: { code: 200, message: 'OK' },
-          data: [{
-            organization: { id: 1, uid: 'org-123', name: 'Test Org' },
-            role: { id: 1, name: 'admin' },
-          }],
+          data: [
+            {
+              organization: { id: 1, uid: 'org-123', name: 'Test Org' },
+              role: { id: 1, name: 'admin' },
+            },
+          ],
         }),
       });
     });
@@ -437,13 +462,15 @@ test.describe('Receipts List', () => {
     // Check that pagination information is displayed (like "Showing page 1 of 5")
     // The exact text depends on whether there's data loaded
     const paginationText = page.getByText(/showing page|page/i);
-    const hasPaginationText = await paginationText.count() > 0;
+    const hasPaginationText = (await paginationText.count()) > 0;
 
     // Or check for navigation buttons
     const prevButton = page.locator('button').filter({ hasText: /previous/i });
     const nextButton = page.locator('button').filter({ hasText: /next/i });
 
     // At least one pagination element should exist
-    expect(hasPaginationText || (await prevButton.count()) > 0 || (await nextButton.count()) > 0).toBeTruthy();
+    expect(
+      hasPaginationText || (await prevButton.count()) > 0 || (await nextButton.count()) > 0,
+    ).toBeTruthy();
   });
 });

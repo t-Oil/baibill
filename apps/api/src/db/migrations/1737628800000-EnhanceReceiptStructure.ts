@@ -118,10 +118,7 @@ export class EnhanceReceiptStructure1737628800000 {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     // Drop foreign key
-    await queryRunner.dropForeignKey(
-      'receipt_line_items',
-      'FK_receipt_line_items_receipt_id',
-    );
+    await queryRunner.dropForeignKey('receipt_line_items', 'FK_receipt_line_items_receipt_id');
 
     // Drop index
     await queryRunner.query(`DROP INDEX "IDX_receipt_line_items_receipt_id"`);

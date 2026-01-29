@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned Features
+
 - Mobile app (React Native)
 - Bulk receipt upload
 - Advanced search and filtering
@@ -19,9 +20,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - API webhooks
 - Receipt splitting for shared expenses
 
+## [1.1.0] - 2026-01-28
+
+### Added
+
+- **Security Scans**: Implemented automated scanning for sensitive data (keys, credentials) in the codebase.
+- **Form Validation**: Refactored frontend forms (Login, Organization, Invitation) to use `react-hook-form` and `zod` for robust schema validation and better UX.
+- **Event-Driven Architecture**: Refactored the email sending system to use `@nestjs/event-emitter`.
+  - Added `OrganizationInviteEvent`, `UserWelcomeEvent`, and `EmailConfirmationEvent`.
+  - Implemented `MailListener` to decouple email logic from business services.
+- **Member Management**:
+  - Implemented automatic linking of pending email invitations to new user accounts upon registration.
+  - Enhanced member onboarding flow to immediately add invited users to organizations after signup.
+
+### Changed
+
+- **Branding**: Updated application branding to "BaiBill" with consistent dark theme and color palette.
+- **Code Quality**:
+  - Removed all `console.log` statements and commented-out code.
+  - Standardized inline comments and added JSDoc documentation to all services and controllers.
+  - Enforced consistent 2-space indentation across the entire codebase using Prettier.
+  - Removed unused dependencies and cleaned up the `packages` directory.
+- **MailService**: Decoupled `MailService` from `AuthService`, `UserService`, and `OrganizationService`. It is no longer exported globally to enforce event-based usage.
+- **Database Templates**: Migrated email templates to be fully database-driven, removing hardcoded fallbacks for better manageability.
+
+### Fixed
+
+- **PDF OCR**: Resolved `pdf-parse` issues to enable correct text extraction from PDF receipts.
+- **Build Errors**: Fixed TypeScript errors in `apps/api` related to removed `MailService` methods by updating all consumers to use events.
+
 ## [1.0.0] - 2026-01-27
 
 ### Added
+
 - Initial release of Receipt OCR
 - **OCR Processing**
   - Google Cloud Vision API integration
@@ -114,6 +145,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Setup and configuration instructions
 
 ### Technical Stack
+
 - **Frontend**: Next.js 15, React 19, TypeScript, Tailwind CSS
 - **Backend**: NestJS, TypeScript, Node.js 20
 - **Database**: PostgreSQL 16
@@ -126,6 +158,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Documentation**: Swagger/OpenAPI
 
 ### Security Improvements
+
 - Non-root container users
 - Read-only filesystems
 - Dropped Linux capabilities
@@ -138,6 +171,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Version Numbering
 
 We use [Semantic Versioning](https://semver.org/):
+
 - **MAJOR** version for incompatible API changes
 - **MINOR** version for backwards-compatible functionality additions
 - **PATCH** version for backwards-compatible bug fixes

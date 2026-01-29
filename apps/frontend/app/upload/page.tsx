@@ -57,7 +57,8 @@ export default function UploadPage() {
         setResult(data.data);
         setSuccess(`Receipt processed successfully! Merchant: ${data.data.merchantName}`);
       } else {
-        const errorMessage = data.error?.errors?.[0] || data.status.message || 'Failed to process receipt';
+        const errorMessage =
+          data.error?.errors?.[0] || data.status.message || 'Failed to process receipt';
         throw new Error(errorMessage);
       }
     } catch (error) {
@@ -106,15 +107,29 @@ export default function UploadPage() {
                   <div className="relative">
                     <div className="animate-spin rounded-full h-12 w-12 border-4 border-[var(--loading)]/30 border-t-[var(--loading)]"></div>
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <svg className="w-5 h-5 text-[var(--loading)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      <svg
+                        className="w-5 h-5 text-[var(--loading)]"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        />
                       </svg>
                     </div>
                   </div>
                   <div className="text-center">
-                    <h3 className="text-lg font-medium text-[var(--button-primary)]">Processing Receipt</h3>
+                    <h3 className="text-lg font-medium text-[var(--button-primary)]">
+                      Processing Receipt
+                    </h3>
                     <p className="mt-1 text-sm text-[var(--button-primary)]/80">{processingStep}</p>
-                    <p className="mt-2 text-xs text-[var(--muted)]">This may take a few seconds...</p>
+                    <p className="mt-2 text-xs text-[var(--muted)]">
+                      This may take a few seconds...
+                    </p>
                   </div>
                 </div>
               </div>
@@ -126,7 +141,11 @@ export default function UploadPage() {
             <div className="bg-[var(--success)]/10 border border-[var(--success)]/30 rounded-xl p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-[var(--success)]" viewBox="0 0 20 20" fill="currentColor">
+                  <svg
+                    className="h-5 w-5 text-[var(--success)]"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
                     <path
                       fillRule="evenodd"
                       d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -147,7 +166,11 @@ export default function UploadPage() {
             <div className="bg-[var(--error)]/10 border border-[var(--error)]/30 rounded-xl p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-[var(--error)]" viewBox="0 0 20 20" fill="currentColor">
+                  <svg
+                    className="h-5 w-5 text-[var(--error)]"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
                     <path
                       fillRule="evenodd"
                       d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"

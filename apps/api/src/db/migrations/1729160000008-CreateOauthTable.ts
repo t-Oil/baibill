@@ -77,9 +77,7 @@ export class CreateOauthTable1729160000008 implements MigrationInterface {
     await queryRunner.query(`DROP INDEX "IDX_oauth_user_id"`);
 
     const table = await queryRunner.getTable('oauth');
-    const foreignKey = table.foreignKeys.find(
-      (fk) => fk.columnNames.indexOf('user_id') !== -1,
-    );
+    const foreignKey = table.foreignKeys.find((fk) => fk.columnNames.indexOf('user_id') !== -1);
     if (foreignKey) {
       await queryRunner.dropForeignKey('oauth', foreignKey);
     }

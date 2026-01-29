@@ -77,9 +77,7 @@ export class UserController {
   @Post()
   @Roles(UserPermission.USER_CREATE)
   @UseResources(UserResource)
-  async create(
-    @Body() createUserRequest: CreateUserRequestDto,
-  ): Promise<ApiResource> {
+  async create(@Body() createUserRequest: CreateUserRequestDto): Promise<ApiResource> {
     try {
       const response = await this.userService.create(createUserRequest);
 

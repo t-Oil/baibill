@@ -14,13 +14,7 @@ interface LoadingSpinnerProps {
  * @param className Additional CSS classes
  * @param color Optional custom color override
  */
-export function LoadingSpinner({ 
-  size = 'md', 
-  className = '',
-  color 
-}: LoadingSpinnerProps) {
-  
-
+export function LoadingSpinner({ size = 'md', className = '', color }: LoadingSpinnerProps) {
   const sizeClasses = {
     sm: 'h-5 w-5 border-2',
     md: 'h-8 w-8 border-4',
@@ -29,7 +23,7 @@ export function LoadingSpinner({
   };
 
   const spinnerStyle = color ? { borderColor: `${color} transparent ${color} ${color}` } : {};
-  
+
   return (
     <div
       className={`animate-spin rounded-full ${sizeClasses[size]} border-t-transparent border-b-transparent border-[var(--loading)] ${className}`}

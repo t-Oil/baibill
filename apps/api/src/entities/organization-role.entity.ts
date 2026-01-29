@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 /**
  * Entity representing organization roles within the system.
@@ -6,18 +12,18 @@ import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
  */
 @Entity('organization_roles')
 export class OrganizationRoleEntity {
-    @PrimaryGeneratedColumn()
-    id!: number;
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @Column({ type: 'varchar', length: 50, unique: true })
-    name: string;
+  @Column({ type: 'varchar', length: 50, unique: true })
+  name: string;
 
-    @Column({ type: 'text', nullable: true })
-    description?: string;
+  @Column({ type: 'text', nullable: true })
+  description?: string;
 
-    @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
-    createdAt!: Date;
+  @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
+  createdAt!: Date;
 
-    @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
-    updatedAt!: Date;
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
+  updatedAt!: Date;
 }

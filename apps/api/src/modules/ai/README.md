@@ -77,6 +77,7 @@ OPENAI_API_KEY=sk-...
 ```
 
 Behavior:
+
 1. Tries AI parsing first
 2. If AI returns high/medium confidence → uses AI result
 3. If AI returns low confidence or fails → falls back to regex parser
@@ -89,6 +90,7 @@ Prompts are externalized in [`prompts/receipt-parser.prompt.ts`](./prompts/recei
 **Prompt Version**: 1.0.0
 
 Changes to prompts should:
+
 1. Increment the version number
 2. Document what changed and why
 3. Test with real receipt samples
@@ -125,12 +127,14 @@ The AI service returns:
 ## Logging
 
 The AI service logs:
+
 - Service initialization (enabled/disabled)
 - Each parsing attempt with metadata
 - Success/failure with confidence level
 - Fallback to regex parser when needed
 
 Example logs:
+
 ```
 [LOG] AI Service initialized with model: gpt-4o-mini, temperature: 0.1
 [LOG] AI parsing receipt (length: 542, model: gpt-4o-mini, version: 1.0.0)
@@ -149,21 +153,27 @@ Example logs:
 ## Testing
 
 ### Test with AI Disabled
+
 ```bash
 OPENAI_ENABLED=false npm run start:dev
 ```
+
 Expected: Uses regex parser, logs "AI Service is disabled"
 
 ### Test with AI Enabled (no key)
+
 ```bash
 OPENAI_ENABLED=true npm run start:dev
 ```
+
 Expected: Warns "OPENAI_API_KEY is not configured", disables AI
 
 ### Test with AI Enabled (with key)
+
 ```bash
 OPENAI_ENABLED=true OPENAI_API_KEY=sk-... npm run start:dev
 ```
+
 Expected: Uses AI parsing, logs model and version
 
 ## Cost Considerations
@@ -175,16 +185,19 @@ Expected: Uses AI parsing, logs model and version
 ## Troubleshooting
 
 ### AI always falls back to regex
+
 - Check API key is valid
 - Check `OPENAI_ENABLED=true`
 - Check logs for error messages
 
 ### Low confidence results
+
 - Try adjusting `OPENAI_TEMPERATURE` (lower = more consistent)
 - Update prompt to be more specific
 - Check OCR quality (garbage in, garbage out)
 
 ### High costs
+
 - Switch to `gpt-4o-mini` (cheapest)
 - Set `OPENAI_ENABLED=false` for non-critical environments
 - Add rate limiting if needed

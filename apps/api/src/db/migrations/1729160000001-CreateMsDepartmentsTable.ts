@@ -4,9 +4,7 @@ import { MigrationInterface, QueryRunner, Table } from 'typeorm';
  * Migration: Create ms_departments table
  * This table stores department master data
  */
-export class CreateMsDepartmentsTable1729160000001
-  implements MigrationInterface
-{
+export class CreateMsDepartmentsTable1729160000001 implements MigrationInterface {
   name = 'CreateMsDepartmentsTable1729160000001';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

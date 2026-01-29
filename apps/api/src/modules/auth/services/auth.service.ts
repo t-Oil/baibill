@@ -14,9 +14,10 @@ import { LoginRequest } from '../requests/login.request';
 import { RefreshLoginRequest } from '../requests/refresh-login.request';
 import { RegisterRequest } from '../requests/register.request';
 import { UserService } from '@modules/user/services/user.service';
-import { MailService } from '@modules/mail/mail.service';
+
 import { ActiveStatusEnum } from '@commons/enums/active-status.enum';
-import { EmailTemplateType } from '@entities/email-template.entity';
+import { UserWelcomeEvent } from '@modules/mail/events/mail.events';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class AuthService {
@@ -34,35 +35,30 @@ export class AuthService {
     private readonly oauthRepository: OauthRepository,
     private readonly logger: Logger,
     private readonly userService: UserService,
-    private readonly mailService: MailService,
+
+    private readonly eventEmitter: EventEmitter2,
   ) {
     this.jwtAccessSecret = this.configService.get<string>('jwt.access.secret');
     this.jwtAccessExpire = this.configService.get<number>('jwt.access.expire');
-    this.jwtRefreshSecret =
-      this.configService.get<string>('jwt.refresh.secret');
-    this.jwtRefreshExpire =
-      this.configService.get<number>('jwt.refresh.expire');
+    this.jwtRefreshSecret = this.configService.get<string>('jwt.refresh.secret');
+    this.jwtRefreshExpire = this.configService.get<number>('jwt.refresh.expire');
   }
 
   async login(payload: LoginRequest): Promise<IGenerateToken> {
     try {
       const { username, password } = payload;
 
-      const user: UserEntity =
-        await this.userRepository.findOneWithActive({
-          where: {
-            email: username,
-          },
-        });
+      const user: UserEntity = await this.userRepository.findOneWithActive({
+        where: {
+          email: username,
+        },
+      });
 
       if (!user) {
         throw new Error('Unauthorized');
       }
 
-      const comparePassword: boolean = await compare(
-        password,
-        user.password,
-      );
+      const comparePassword: boolean = await compare(password, user.password);
 
       if (!comparePassword) {
         throw new Error('Unauthorized');
@@ -75,7 +71,7 @@ export class AuthService {
           username: payload.username,
           message: error.message,
         },
-      })
+      });
       throw AuthException.Unauthorized();
     }
   }
@@ -104,15 +100,7 @@ export class AuthService {
 
     await this.userRepository.save(user);
 
-    // Send welcome email now? Or just confirm.
-    // Maybe send welcome email here since they are now active.
-    if (this.mailService.isMailEnabled()) {
-      await this.mailService.sendWithTemplate(
-        EmailTemplateType.WELCOME,
-        { email: user.email, name: user.firstName },
-        { firstName: user.firstName }
-      ).catch(err => console.error('Failed to send welcome email:', err));
-    }
+    this.eventEmitter.emit(UserWelcomeEvent.NAME, new UserWelcomeEvent(user.email, user.firstName));
 
     return { message: 'Email verified successfully' };
   }
@@ -152,4 +140,3 @@ export class AuthService {
     }
   }
 }
-

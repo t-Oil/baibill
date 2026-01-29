@@ -5,15 +5,11 @@ import { MenuEntity } from '@entities/menu.entity';
 import { v4 as uuidv4 } from 'uuid';
 
 export default class MenuSeeder implements Seeder {
-  public async run(
-    dataSource: DataSource,
-    createdById?: number,
-  ): Promise<MenuEntity[]> {
+  public async run(dataSource: DataSource, createdById?: number): Promise<MenuEntity[]> {
     const repository = dataSource.getRepository(MenuEntity);
 
     const count = await repository.count();
     if (count > 0) {
-
       return await repository.find();
     }
 
@@ -41,7 +37,6 @@ export default class MenuSeeder implements Seeder {
     ];
 
     const savedParentMenus = await repository.save(parentMenus);
-
 
     const parentMenuMap = savedParentMenus.reduce((map, menu) => {
       map[menu.name] = menu;
@@ -152,7 +147,6 @@ export default class MenuSeeder implements Seeder {
     ];
 
     const savedChildMenus = await repository.save(childMenus);
-
 
     return [...savedParentMenus, ...savedChildMenus];
   }
