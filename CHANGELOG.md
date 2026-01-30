@@ -20,6 +20,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - API webhooks
 - Receipt splitting for shared expenses
 
+## [1.1.1] - 2026-01-30
+
+### Fixed
+
+- **Docker Build**: Resolved monorepo build failures by correcting build context and workspace configuration in API Dockerfile
+- **Automatic Migrations**: Fixed TypeORM configuration to properly run database migrations on container startup
+  - Corrected migration path from `__dirname + './../../db/migrations/*'` to `__dirname + '/../../db/migrations/*'`
+  - Fixed boolean comparison bug causing migrations to be skipped (string comparison → boolean comparison)
+- **Nginx Configuration**: Removed duplicate server block that was causing 404 errors on root path
+- **Network Conflicts**: Changed Docker network subnet from 172.20.0.0/16 to 172.29.0.0/16 to avoid address space conflicts
+
+### Changed
+
+- **Default Ports**: Updated exposed ports from 80/443 to 8181/8443 to prevent conflicts with other services
+- **API URL**: Updated `NEXT_PUBLIC_API_URL` configuration to match new port (http://localhost:8181/api)
+
+### Added
+
+- **Docker Documentation**: Comprehensive Docker deployment guide (README.docker.md) including:
+  - Quick start guide with step-by-step setup instructions
+  - Database seeder commands for first-time initialization
+  - OCR provider configuration (OpenAI GPT-4o and Google Cloud Vision)
+  - Email service configuration (Mailjet)
+  - Environment variables reference table
+  - Production deployment checklist with security best practices
+  - Automatic migrations documentation
+  - Custom port configuration guide
+- **Secrets Management**: Added volume mount for GCP Vision API credentials (`apps/api/secrets/`)
+- **Environment Template**: Created `.env.docker.example` with comprehensive configuration examples and security notes
+- **Seeder Documentation**: Added instructions for resolving circular dependency in initial database setup
+
 ## [1.1.0] - 2026-01-28
 
 ### Added
@@ -194,5 +225,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute to th
 
 ---
 
-[Unreleased]: https://github.com/t-Oil/baibill/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/t-Oil/baibill/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/t-Oil/baibill/compare/v1.1.0...v1.1.1
+[1.1.0]: https://github.com/t-Oil/baibill/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/t-Oil/baibill/releases/tag/v1.0.0

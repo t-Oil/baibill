@@ -46,35 +46,75 @@ This guide explains how to run the Receipt OCR application using Docker Compose 
    DATABASE_PASSWORD=<your-secure-password>
    JWT_ACCESS_SECRET=<generated-secret>
    JWT_REFRESH_SECRET=<generated-secret>
+
+   # Add your OpenAI API key for OCR functionality
+   OPENAI_API_KEY=sk-proj-your_actual_key_here
+   OPENAI_MODEL=gpt-4o
+
+   # (Optional) Email configuration for user invitations
+   MAILJET_API_KEY=your_mailjet_key
+   MAILJET_API_SECRET=your_mailjet_secret
+   MAIL_FROM_EMAIL=noreply@yourdomain.com
    ```
 
 4. **Build and start the services**:
 
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
 
-5. **Check the status**:
+5. **Wait for initialization** (migrations run automatically):
+
+   The application will automatically run database migrations on first startup. Wait about 30 seconds for all services to be healthy.
+
+6. **Check the status**:
 
    ```bash
-   docker-compose ps
+   docker compose ps
    ```
 
-6. **Access the application**:
-   - Frontend: http://localhost
-   - API: http://localhost/api
-   - API Documentation: http://localhost/api/docs (development only)
+   All services should show "healthy" status.
 
-7. **Run database migrations**:
+7. **Seed initial data** (required for first-time setup):
 
    ```bash
-   docker-compose exec api npm run migration:run
+   # Create initial admin user and role
+   docker exec -i receipt-ocr-postgres psql -U receipt_ocr_user -d receipt_ocr_db <<'EOSQL'
+   BEGIN;
+   INSERT INTO users (uid, email, password, first_name, last_name, is_active)
+   VALUES (
+     'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
+     'admin@example.com',
+     '\$2b\$10\$q0hjOtRsBW0U9m4qZVPbduqEYlBLjl22DoHRWHu.csh/WmlMU109a',
+     'Admin',
+     'User',
+     '1'
+   );
+   INSERT INTO roles (uid, name, created_by, is_default)
+   VALUES (
+     'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
+     'admin',
+     1,
+     true
+   );
+   INSERT INTO user_roles (user_id, role_id) VALUES (1, 1);
+   COMMIT;
+   EOSQL
+
+   # Run the full seeder
+   docker exec receipt-ocr-api node dist/db/seeds/run-seed.js
    ```
 
-8. **Seed initial data** (optional):
-   ```bash
-   docker-compose exec api npm run seed
-   ```
+8. **Access the application**:
+   - **Frontend**: http://localhost:8181
+   - **API**: http://localhost:8181/api
+   - **Health Check**: http://localhost:8181/api/health/check
+
+9. **Login credentials**:
+   - Email: `admin@example.com`
+   - Password: `password123`
+
+   **⚠️ Important**: Change the admin password immediately after first login!
 
 ## Architecture
 
@@ -115,31 +155,107 @@ The Docker setup consists of four services:
 
 All configuration is done through the `.env` file. Key variables:
 
-| Variable              | Description                         | Example                |
-| --------------------- | ----------------------------------- | ---------------------- |
-| `DATABASE_NAME`       | PostgreSQL database name            | `receipt_ocr_db`       |
-| `DATABASE_USER`       | PostgreSQL username                 | `receipt_ocr_user`     |
-| `DATABASE_PASSWORD`   | PostgreSQL password (change this!)  | Strong password        |
-| `JWT_ACCESS_SECRET`   | JWT access token secret             | 64+ char random string |
-| `JWT_REFRESH_SECRET`  | JWT refresh token secret            | 64+ char random string |
-| `DATABASE_SYNC`       | Auto-sync DB schema (false in prod) | `false`                |
-| `NEXT_PUBLIC_API_URL` | Public API URL                      | `http://localhost/api` |
+| Variable                       | Description                                | Example                             |
+| ------------------------------ | ------------------------------------------ | ----------------------------------- |
+| `DATABASE_NAME`                | PostgreSQL database name                   | `receipt_ocr_db`                    |
+| `DATABASE_USER`                | PostgreSQL username                        | `receipt_ocr_user`                  |
+| `DATABASE_PASSWORD`            | PostgreSQL password (change this!)         | Strong password                     |
+| `JWT_ACCESS_SECRET`            | JWT access token secret                    | 64+ char random string              |
+| `JWT_REFRESH_SECRET`           | JWT refresh token secret                   | 64+ char random string              |
+| `DATABASE_SYNC`                | Auto-sync DB schema (false in prod)        | `false`                             |
+| `NEXT_PUBLIC_API_URL`          | Public API URL                             | `http://localhost:8181/api`         |
+| `OPENAI_ENABLED`               | Enable OpenAI OCR                          | `true`                              |
+| `OPENAI_API_KEY`               | OpenAI API key for OCR                     | `sk-proj-...`                       |
+| `OPENAI_MODEL`                 | OpenAI model to use                        | `gpt-4o`                            |
+| `GOOGLE_APPLICATION_CREDENTIALS` | Path to GCP credentials (alternative)    | `/app/secrets/gcp-vision.json`      |
+| `MAILJET_API_KEY`              | Mailjet API key for emails                 | Get from mailjet.com                |
+| `MAILJET_API_SECRET`           | Mailjet API secret                         | Get from mailjet.com                |
+| `MAIL_FROM_EMAIL`              | Email sender address                       | `noreply@yourdomain.com`            |
+
+### Automatic Migrations
+
+**Database migrations run automatically** when the API container starts (controlled by `DB_AUTO_MIGRATE=true` in docker-compose.yml). On first startup, all 19 migration files will execute automatically, creating:
+
+- 16 database tables
+- Indexes and constraints
+- Foreign key relationships
+
+You can verify migrations ran successfully:
+
+```bash
+docker exec receipt-ocr-postgres psql -U receipt_ocr_user -d receipt_ocr_db -c "\dt"
+```
 
 ### Docker Compose Ports
 
 By default, Nginx exposes:
 
-- Port 80 (HTTP)
-- Port 443 (HTTPS - when configured)
+- Port 8181 (HTTP)
+- Port 8443 (HTTPS - when configured)
 
 To change ports, edit `docker-compose.yml`:
 
 ```yaml
 nginx:
   ports:
-    - '8080:80' # Change left side only
-    - '8443:443'
+    - '8080:80'  # Change left side only (e.g., 8080:80 for port 8080)
+    - '8443:443' # HTTPS port
 ```
+
+**⚠️ Note**: If you change the port, also update `.env`:
+```bash
+NEXT_PUBLIC_API_URL=http://localhost:YOUR_PORT/api
+```
+
+### OCR Provider Configuration
+
+The application supports two OCR providers:
+
+#### Option 1: OpenAI (Recommended - Easier Setup)
+
+1. Get an API key from [OpenAI Platform](https://platform.openai.com/api-keys)
+2. Update `.env`:
+   ```bash
+   OPENAI_ENABLED=true
+   OPENAI_API_KEY=sk-proj-your_key_here
+   OPENAI_MODEL=gpt-4o
+   OPENAI_TEMPERATURE=0
+   ```
+3. Restart containers: `docker compose restart api`
+
+**Models**:
+- `gpt-4o` - Best accuracy, recommended
+- `gpt-4o-mini` - Faster, cheaper, good accuracy
+- `gpt-4-turbo` - Alternative
+
+#### Option 2: Google Cloud Vision
+
+1. Create a GCP project at [Google Cloud Console](https://console.cloud.google.com)
+2. Enable Vision API
+3. Create service account and download JSON credentials
+4. Save credentials as `apps/api/secrets/gcp-vision.json`
+5. Update `.env`:
+   ```bash
+   OPENAI_ENABLED=false
+   GOOGLE_APPLICATION_CREDENTIALS=/app/secrets/gcp-vision.json
+   ```
+6. Restart: `docker compose restart api`
+
+The credentials are automatically mounted as a read-only volume. See `apps/api/secrets/README.md` for detailed setup instructions.
+
+### Email Configuration (Optional)
+
+For user invitation emails:
+
+1. Sign up at [Mailjet](https://app.mailjet.com)
+2. Get API credentials
+3. Update `.env`:
+   ```bash
+   MAILJET_API_KEY=your_key
+   MAILJET_API_SECRET=your_secret
+   MAIL_FROM_EMAIL=noreply@yourdomain.com
+   ```
+4. Restart: `docker compose restart api`
 
 ## Security Features
 
@@ -247,28 +363,29 @@ docker-compose exec -T postgres psql -U receipt_ocr_user receipt_ocr_db < backup
 
 ### Migrations
 
-**Create a new migration**:
-
-```bash
-docker-compose exec api npm run migration:generate -- src/migrations/MigrationName
-```
-
-**Run migrations**:
-
-```bash
-docker-compose exec api npm run migration:run
-```
-
-**Revert last migration**:
-
-```bash
-docker-compose exec api npm run migration:revert
-```
+**⚠️ Note**: Migrations run **automatically** on container startup (controlled by `DB_AUTO_MIGRATE=true`). Manual commands below are only needed for development.
 
 **Show migration status**:
 
 ```bash
-docker-compose exec api npm run migration:show
+docker exec receipt-ocr-api node -e "console.log('Migrations run automatically on startup')"
+docker exec receipt-ocr-postgres psql -U receipt_ocr_user -d receipt_ocr_db -c "SELECT * FROM migrations;"
+```
+
+**For local development** (not needed in Docker):
+
+```bash
+# Create a new migration
+docker compose exec api npm run migration:generate -- src/migrations/MigrationName
+
+# Run migrations manually (if auto-migration is disabled)
+docker compose exec api npm run migration:run
+
+# Revert last migration
+docker compose exec api npm run migration:revert
+
+# Show migration status
+docker compose exec api npm run migration:show
 ```
 
 ### Direct Database Access
@@ -316,13 +433,13 @@ All services should show "healthy" status.
 
 ```bash
 # Nginx
-curl http://localhost/health
+curl http://localhost:8181/health
 
 # API
-curl http://localhost/api/health
+curl http://localhost:8181/api/health/check
 
 # Frontend
-curl http://localhost
+curl http://localhost:8181
 ```
 
 ### Resource Usage
@@ -416,17 +533,36 @@ docker-compose up -d
 
 ### Pre-Deployment Checklist
 
+**Security & Configuration:**
 - [ ] Change all default passwords and secrets in `.env`
-- [ ] Set `DATABASE_SYNC=false` (use migrations)
+- [ ] Generate new JWT secrets (64+ characters)
+- [ ] Change admin password from default (`password123`)
+- [ ] Set `DATABASE_SYNC=false` (migrations run automatically)
 - [ ] Configure SSL certificates
 - [ ] Enable HTTPS redirect in Nginx
+
+**OCR & Services:**
+- [ ] Add OpenAI API key OR configure Google Cloud Vision
+- [ ] Test OCR functionality with sample receipts
+- [ ] Configure email provider (Mailjet) for user invitations
+- [ ] Test email delivery
+
+**Infrastructure:**
 - [ ] Update `APP_URL` and `NEXT_PUBLIC_API_URL` to production domain
 - [ ] Review and adjust Nginx rate limiting
 - [ ] Set up automated PostgreSQL backups
 - [ ] Configure log rotation
 - [ ] Set up monitoring (Prometheus, Grafana, etc.)
-- [ ] Configure firewall rules
+- [ ] Configure firewall rules (close unnecessary ports)
 - [ ] Set up reverse proxy if using cloud load balancer
+- [ ] Configure custom ports if port 80/443 are unavailable
+
+**Testing:**
+- [ ] Verify all 16 database tables created
+- [ ] Run seeders to populate initial data
+- [ ] Test user registration and login
+- [ ] Test receipt upload and OCR extraction
+- [ ] Test organization management features
 - [ ] Test all functionality in staging environment
 - [ ] Plan rollback strategy
 

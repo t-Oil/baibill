@@ -10,6 +10,9 @@ class TypeOrmConfigService implements TypeOrmOptionsFactory {
     const isTesting = this.configService.get<string>('mode') === 'test';
     const isDevelopment = this.configService.get<string>('mode') === 'develop';
 
+    // Check if automatic migrations should run (Docker deployment)
+    const autoMigrate = this.configService.get<boolean>('database.autoMigrate') === true;
+
     let defaultOptions: TypeOrmModuleOptions & SeederOptions = {
       type: this.configService.get<string>('database.type') as 'postgres',
       host: this.configService.get<string>('database.host'),
@@ -17,12 +20,13 @@ class TypeOrmConfigService implements TypeOrmOptionsFactory {
       username: this.configService.get<string>('database.username'),
       password: this.configService.get<string>('database.password'),
       database: this.configService.get<string>('database.name'),
-      entities: [__dirname + './../../entities/*.entity{.ts,.js}'],
-      // IMPORTANT: Disable automatic migrations to avoid ESM/CommonJS loading issues
-      // Run migrations manually via CLI: npm run migration:run
-      migrations: [],
+      entities: [__dirname + '/../../entities/*.entity{.ts,.js}'],
+      // Migrations configuration
+      // For Docker: migrations run automatically when DB_AUTO_MIGRATE=true
+      // For local dev: run manually via CLI: npm run migration:run
+      migrations: autoMigrate ? [__dirname + '/../../db/migrations/*{.ts,.js}'] : [],
       migrationsTableName: 'migrations',
-      migrationsRun: false,
+      migrationsRun: autoMigrate,
       synchronize: false,
       dropSchema: this.configService.get<boolean>('database.dropSchema'),
       factories: ['src/db/seeds/factories/**/*{.ts,.js}'],
