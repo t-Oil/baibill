@@ -48,7 +48,6 @@ export class CreateOauthTable1729160000008 implements MigrationInterface {
       true,
     );
 
-    // Create foreign key to users table
     await queryRunner.createForeignKey(
       'oauth',
       new TableForeignKey({
@@ -59,7 +58,6 @@ export class CreateOauthTable1729160000008 implements MigrationInterface {
       }),
     );
 
-    // Create indexes
     await queryRunner.query(`
       CREATE INDEX "IDX_oauth_user_id" ON "oauth" ("user_id")
     `);

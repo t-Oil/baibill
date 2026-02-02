@@ -253,4 +253,5 @@ export class UserService {
       throw UserException.updateError(['Something went wrong when updating user']);
     }
   }
+
 }

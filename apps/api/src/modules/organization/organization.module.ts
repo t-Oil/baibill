@@ -12,6 +12,8 @@ import { OrganizationRoleEntity } from '@entities/organization-role.entity';
 import { UserOrganizationEntity } from '@entities/user-organization.entity';
 import { OrganizationInvitationEntity } from '@entities/organization-invitation.entity';
 import { UserRepository } from '@repositories/user.repository';
+import { UserSubscriptionRepository } from '@repositories/user-subscription.repository';
+import { PlanRepository } from '@repositories/plan.repository';
 import { MailModule } from '@modules/mail/mail.module';
 
 /**
@@ -35,6 +37,8 @@ import { MailModule } from '@modules/mail/mail.module';
     OrganizationRoleRepository,
     OrganizationInvitationRepository,
     UserRepository,
+    UserSubscriptionRepository,
+    PlanRepository,
   ],
 })
 export class OrganizationModule {}

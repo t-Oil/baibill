@@ -97,7 +97,6 @@ export class CreateMenusTable1729160000002 implements MigrationInterface {
       true,
     );
 
-    // Create self-referencing foreign key for parent_id
     await queryRunner.createForeignKey(
       'menus',
       new TableForeignKey({
@@ -108,7 +107,6 @@ export class CreateMenusTable1729160000002 implements MigrationInterface {
       }),
     );
 
-    // Create indexes
     await queryRunner.query(`
       CREATE INDEX "IDX_menus_uid" ON "menus" ("uid")
     `);

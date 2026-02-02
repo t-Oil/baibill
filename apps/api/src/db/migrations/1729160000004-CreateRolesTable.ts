@@ -80,7 +80,6 @@ export class CreateRolesTable1729160000004 implements MigrationInterface {
       true,
     );
 
-    // Create indexes
     await queryRunner.query(`
       CREATE INDEX "IDX_roles_uid" ON "roles" ("uid")
     `);

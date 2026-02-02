@@ -27,7 +27,6 @@ export class CreateRolePermissionsTable1729160000005 implements MigrationInterfa
       true,
     );
 
-    // Create foreign key to roles table
     await queryRunner.createForeignKey(
       'role_permissions',
       new TableForeignKey({
@@ -38,7 +37,6 @@ export class CreateRolePermissionsTable1729160000005 implements MigrationInterfa
       }),
     );
 
-    // Create foreign key to permissions table
     await queryRunner.createForeignKey(
       'role_permissions',
       new TableForeignKey({
@@ -49,7 +47,6 @@ export class CreateRolePermissionsTable1729160000005 implements MigrationInterfa
       }),
     );
 
-    // Create indexes for better query performance
     await queryRunner.query(`
       CREATE INDEX "IDX_role_permissions_role_id" ON "role_permissions" ("role_id")
     `);
@@ -64,7 +61,6 @@ export class CreateRolePermissionsTable1729160000005 implements MigrationInterfa
 
     const table = await queryRunner.getTable('role_permissions');
 
-    // Drop foreign keys
     const roleForeignKey = table.foreignKeys.find((fk) => fk.columnNames.indexOf('role_id') !== -1);
     if (roleForeignKey) {
       await queryRunner.dropForeignKey('role_permissions', roleForeignKey);

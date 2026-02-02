@@ -45,7 +45,6 @@ export default class PermissionSeeder implements Seeder {
         permission: UserPermission.USER_ROLE_DELETE,
         route: '/admin/roles/:roleId/delete',
       },
-      // Add more mappings as needed
     ];
 
     const queryRunner = dataSource.createQueryRunner();

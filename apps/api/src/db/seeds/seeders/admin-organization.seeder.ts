@@ -13,7 +13,6 @@ export default class AdminOrganizationSeeder implements Seeder {
     const userOrgRepository = dataSource.getRepository(UserOrganizationEntity);
     const orgRoleRepository = dataSource.getRepository(OrganizationRoleEntity);
 
-    // Find Admin User
     const adminUser = await userRepository.findOne({
       where: { email: 'admin@example.com' },
       relations: ['organizations'],
@@ -27,7 +26,6 @@ export default class AdminOrganizationSeeder implements Seeder {
       return;
     }
 
-    // Get Admin Role
     const orgAdminRole = await orgRoleRepository.findOne({
       where: { name: 'admin' },
     });
@@ -37,7 +35,6 @@ export default class AdminOrganizationSeeder implements Seeder {
       return;
     }
 
-    // Create Default Organization
     const defaultOrg = orgRepository.create({
       uid: uuidv4(),
       name: 'Default Organization',
@@ -47,7 +44,6 @@ export default class AdminOrganizationSeeder implements Seeder {
 
     const savedOrg = await orgRepository.save(defaultOrg);
 
-    // Assign User to Org
     const userOrg = userOrgRepository.create({
       userId: adminUser.id,
       organizationId: savedOrg.id,

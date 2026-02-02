@@ -68,6 +68,14 @@ BaiBill is a production-ready, self-hosted application that automates receipt ma
   - Invite users via email
   - Switch between organizations seamlessly
 
+- 💳 **Subscription Plans**
+  - Flexible, database-driven plan system
+  - Default plans: Free, Pro, Business
+  - Configurable limits per plan (uploads, organizations, members)
+  - Upload limit enforcement
+  - Organization creation restrictions by plan
+  - Subscription tracking with expiration and trial support
+
 - 🔐 **Security & Authentication**
   - JWT-based authentication
   - Email verification

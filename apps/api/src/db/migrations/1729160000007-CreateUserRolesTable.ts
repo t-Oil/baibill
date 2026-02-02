@@ -27,7 +27,6 @@ export class CreateUserRolesTable1729160000007 implements MigrationInterface {
       true,
     );
 
-    // Create foreign key to users table
     await queryRunner.createForeignKey(
       'user_roles',
       new TableForeignKey({
@@ -38,7 +37,6 @@ export class CreateUserRolesTable1729160000007 implements MigrationInterface {
       }),
     );
 
-    // Create foreign key to roles table
     await queryRunner.createForeignKey(
       'user_roles',
       new TableForeignKey({
@@ -49,7 +47,6 @@ export class CreateUserRolesTable1729160000007 implements MigrationInterface {
       }),
     );
 
-    // Create indexes for better query performance
     await queryRunner.query(`
       CREATE INDEX "IDX_user_roles_user_id" ON "user_roles" ("user_id")
     `);
@@ -64,7 +61,6 @@ export class CreateUserRolesTable1729160000007 implements MigrationInterface {
 
     const table = await queryRunner.getTable('user_roles');
 
-    // Drop foreign keys
     const userForeignKey = table.foreignKeys.find((fk) => fk.columnNames.indexOf('user_id') !== -1);
     if (userForeignKey) {
       await queryRunner.dropForeignKey('user_roles', userForeignKey);

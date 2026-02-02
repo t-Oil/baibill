@@ -7,7 +7,6 @@ export class CreateEmailTemplatesTable1737925000000 implements MigrationInterfac
   name = 'CreateEmailTemplatesTable1737925000000';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Create enum type
     await queryRunner.query(`
             CREATE TYPE "email_templates_type_enum" AS ENUM (
                 'invitation',
@@ -18,7 +17,6 @@ export class CreateEmailTemplatesTable1737925000000 implements MigrationInterfac
             )
         `);
 
-    // Create table
     await queryRunner.createTable(
       new Table({
         name: 'email_templates',

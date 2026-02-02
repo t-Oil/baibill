@@ -5,6 +5,7 @@ import Link from 'next/link';
 import DashboardLayout from '@/components/DashboardLayout';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { useOrganization } from '@/contexts/OrganizationContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -30,6 +31,7 @@ interface PendingInvitation {
 
 export default function OrganizationsPage() {
   const { organizations, currentOrg, refreshOrganizations, switchOrg } = useOrganization();
+  const { user } = useAuth();
   const [isCreating, setIsCreating] = useState(false);
   const [serverError, setServerError] = useState('');
   const [pendingInvitations, setPendingInvitations] = useState<PendingInvitation[]>([]);
@@ -126,8 +128,14 @@ export default function OrganizationsPage() {
         body: JSON.stringify(data),
       });
 
+      const responseData = await response.json();
+
       if (!response.ok) {
-        throw new Error('Failed to create organization');
+        const errorMessage =
+          responseData.error?.errors?.[0] ||
+          responseData.status?.message ||
+          'Failed to create organization';
+        throw new Error(errorMessage);
       }
 
       await refreshOrganizations();
@@ -147,12 +155,35 @@ export default function OrganizationsPage() {
               <h1 className="text-3xl font-bold text-[var(--text)]">Organizations</h1>
               <p className="mt-2 text-[var(--muted)]">Manage your organizations and memberships</p>
             </div>
-            <button
-              onClick={() => setIsCreating(true)}
-              className="px-4 py-2 bg-[var(--button-primary)] text-white rounded-lg hover:bg-[var(--button-hover)] transition-colors"
-            >
-              Create Organization
-            </button>
+            <div className="relative group">
+              <button
+                onClick={() => {
+                  if (!user?.plan?.canCreateOrg) {
+                    setServerError(`Your ${user?.plan?.displayName || 'current'} plan does not allow creating organizations. Please upgrade.`);
+                    return;
+                  }
+                  setIsCreating(true);
+                }}
+                disabled={!user?.plan?.canCreateOrg}
+                className={`px-4 py-2 rounded-lg transition-colors ${
+                  !user?.plan?.canCreateOrg
+                    ? 'bg-[var(--muted)]/30 text-[var(--muted)] cursor-not-allowed'
+                    : 'bg-[var(--button-primary)] text-white hover:bg-[var(--button-hover)]'
+                }`}
+                title={
+                  !user?.plan?.canCreateOrg
+                    ? 'Upgrade your plan to create organizations'
+                    : 'Create a new organization'
+                }
+              >
+                Create Organization
+              </button>
+              {!user?.plan?.canCreateOrg && (
+                <div className="absolute right-0 mt-2 w-64 p-3 bg-[var(--surface)] border border-[var(--border)] rounded-lg shadow-lg text-sm text-[var(--muted)] z-10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  Your {user?.plan?.displayName || 'current'} plan does not allow creating organizations. Please upgrade.
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Pending Invitations Section */}

@@ -206,7 +206,6 @@ export class BaseRepository<Entity> extends Repository<Entity> {
     joinedRelations: Set<string>,
   ): void {
     globalSearch.fields.forEach((field, index) => {
-      // Ensure relations are joined in the main query builder
       if (field.includes('.')) {
         const relationPath = this.extractRelationPath(field);
         this.ensureNestedRelationJoined(queryBuilder.subQuery(), relationPath, joinedRelations);

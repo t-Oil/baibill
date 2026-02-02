@@ -10,6 +10,7 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 import { v4 as uuidv4 } from 'uuid';
 import { ActiveStatusEnum } from '@commons/enums/active-status.enum';
 import { UserEntity } from './user.entity';
@@ -22,6 +23,7 @@ import { UserOrganizationEntity } from './user-organization.entity';
 @Entity('organizations')
 export class OrganizationEntity {
   @PrimaryGeneratedColumn()
+  @Exclude()
   id!: number;
 
   @Column({ type: 'uuid', unique: true })
@@ -34,6 +36,7 @@ export class OrganizationEntity {
   description?: string;
 
   @Column({ name: 'created_by', nullable: true })
+  @Exclude()
   createdBy?: number;
 
   @ManyToOne(() => UserEntity)
@@ -50,14 +53,15 @@ export class OrganizationEntity {
   updatedAt!: Date;
 
   @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp', nullable: true })
+  @Exclude()
   deletedAt?: Date;
 
   @Column({
     name: 'is_active',
-    type: 'enum',
-    enum: ActiveStatusEnum,
+    type: 'smallint',
     default: ActiveStatusEnum.ACTIVE,
   })
+  @Exclude()
   isActive!: ActiveStatusEnum;
 
   @BeforeInsert()

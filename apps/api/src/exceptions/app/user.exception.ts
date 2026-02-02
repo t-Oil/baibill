@@ -60,4 +60,12 @@ export class UserException extends ApiException {
   static exportUserError(error?: string[]): ApiException {
     throw new ApiException(100010, error);
   }
+
+  static uploadLimitReached(error?: string[]): ApiException {
+    throw new ApiException(100011, error, HttpStatus.OK);
+  }
+
+  static cannotCreateOrganization(error?: string[]): ApiException {
+    throw new ApiException(100012, error, HttpStatus.OK);
+  }
 }

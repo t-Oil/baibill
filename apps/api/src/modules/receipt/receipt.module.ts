@@ -9,18 +9,27 @@ import { AiModule } from '@modules/ai/ai.module';
 import { LoggerModule } from '@modules/logger/logger.module';
 import { OrganizationRepository } from '@repositories/organization.repository';
 import { UserOrganizationRepository } from '@repositories/user-organization.repository';
+import { UserSubscriptionRepository } from '@repositories/user-subscription.repository';
+import { PlanRepository } from '@repositories/plan.repository';
 
 /**
  * Module for receipt processing.
  */
 @Module({
-  imports: [TypeOrmModule.forFeature([ReceiptEntity]), OcrModule, AiModule, LoggerModule],
+  imports: [
+    TypeOrmModule.forFeature([ReceiptEntity]),
+    OcrModule,
+    AiModule,
+    LoggerModule,
+  ],
   controllers: [ReceiptController],
   providers: [
     ReceiptService,
     ReceiptRepository,
     OrganizationRepository,
     UserOrganizationRepository,
+    UserSubscriptionRepository,
+    PlanRepository,
   ],
   exports: [ReceiptService],
 })

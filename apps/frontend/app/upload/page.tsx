@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { UploadForm } from '@/components/UploadForm';
 import { ResultView } from '@/components/ResultView';
 import { useOrganization } from '@/contexts/OrganizationContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { apiGet, apiPost } from '@/lib/api';
 
 /**
  * UploadPage component for uploading receipt images.
@@ -18,7 +20,28 @@ export default function UploadPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [processingStep, setProcessingStep] = useState<string>('');
+  const [uploadCount, setUploadCount] = useState<number | null>(null);
   const { currentOrg } = useOrganization();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    // Fetch upload count for users with upload limits
+    if (user?.plan && user.plan.uploadLimit !== -1) {
+      fetchUploadCount();
+    }
+  }, [user]);
+
+  const fetchUploadCount = async () => {
+    try {
+      const response = await apiGet('/api/receipts/upload/count');
+      const data = await response.json();
+      if (data.status.code === 200) {
+        setUploadCount(data.data.count || 0);
+      }
+    } catch (err) {
+      console.error('Failed to fetch upload count:', err);
+    }
+  };
 
   /**
    * Handles the file upload process.
@@ -36,29 +59,39 @@ export default function UploadPage() {
     formData.append('file', file);
 
     try {
-      const token = localStorage.getItem('accessToken');
-      const url = '/api/receipts/upload';
-
       setProcessingStep('Extracting text from image (OCR)...');
 
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
+      const response = await apiPost('/api/receipts/upload', formData);
 
       setProcessingStep('Parsing receipt data...');
 
       const data = await response.json();
 
-      if (data.status.code === 200) {
+      // Check if response has an error field (even with 200 status)
+      if (data.error) {
+        const errorMessage =
+          data.error.errors?.[0] ||
+          data.error.message ||
+          'Failed to process receipt';
+        throw new Error(errorMessage);
+      }
+
+      // Check for success with data
+      if (response.ok && data.status?.code === 200 && data.data) {
         setResult(data.data);
-        setSuccess(`Receipt processed successfully! Merchant: ${data.data.merchantName}`);
+        const merchantName = data.data.merchantName || 'Unknown Merchant';
+        setSuccess(`Receipt processed successfully! Merchant: ${merchantName}`);
+        // Refresh upload count for users with upload limits
+        if (user?.plan && user.plan.uploadLimit !== -1) {
+          await fetchUploadCount();
+        }
+      } else if (!data.data) {
+        throw new Error('No receipt data returned from server');
       } else {
         const errorMessage =
-          data.error?.errors?.[0] || data.status.message || 'Failed to process receipt';
+          data.status?.message ||
+          data.message ||
+          'Failed to process receipt';
         throw new Error(errorMessage);
       }
     } catch (error) {
@@ -92,6 +125,21 @@ export default function UploadPage() {
                 </span>
               )}
             </p>
+            {user?.plan && user.plan.uploadLimit !== -1 && uploadCount !== null && (
+              <div className="mt-3 p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg">
+                <p className="text-sm text-amber-600 dark:text-amber-400">
+                  <strong>{user.plan.displayName} Plan:</strong> {uploadCount}/{user.plan.uploadLimit} receipts uploaded
+                  {uploadCount >= user.plan.uploadLimit - 1 && uploadCount < user.plan.uploadLimit && (
+                    <span className="block mt-1">You have {user.plan.uploadLimit - uploadCount} upload(s) remaining.</span>
+                  )}
+                  {uploadCount >= user.plan.uploadLimit && (
+                    <span className="block mt-1 font-semibold">
+                      Upload limit reached. Upgrade your plan for more uploads.
+                    </span>
+                  )}
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Upload form */}

@@ -8,13 +8,23 @@ import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
 import { MeService } from './services/me.service';
 import { MenuRepository } from '@repositories/menu.repository';
+import { UserSubscriptionRepository } from '@repositories/user-subscription.repository';
+import { PlanRepository } from '@repositories/plan.repository';
 
 import { UserModule } from '@modules/user/user.module';
 
 @Module({
   imports: [JwtModule, LoggerModule, UserModule],
   controllers: [AuthController, MeController],
-  providers: [AuthService, MeService, UserRepository, OauthRepository, MenuRepository],
+  providers: [
+    AuthService,
+    MeService,
+    UserRepository,
+    OauthRepository,
+    MenuRepository,
+    UserSubscriptionRepository,
+    PlanRepository,
+  ],
   exports: [MeService],
 })
 export class AuthModule {}

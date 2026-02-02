@@ -50,7 +50,6 @@ async function bootstrap() {
     await backfill.run(dataSource);
 
     const emailTemplates = new EmailTemplateSeeder();
-    // Use factory manager as null/any since we're running manually and not using factories
     await emailTemplates.run(dataSource, null as any);
   } catch (error) {
     console.error('Error during seed execution:', error);

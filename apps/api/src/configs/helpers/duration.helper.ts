@@ -12,16 +12,13 @@
  * @returns Number of seconds, or the input if already a number
  */
 export function parseDuration(duration: string | number): number {
-  // If already a number, return it
   if (typeof duration === 'number') {
     return duration;
   }
 
-  // Parse string duration
   const match = duration.match(/^(\d+)([smhd])$/);
 
   if (!match) {
-    // If invalid format, assume it's seconds and try to parse
     const parsed = parseInt(duration, 10);
     return isNaN(parsed) ? 3600 : parsed; // Default to 1 hour if invalid
   }

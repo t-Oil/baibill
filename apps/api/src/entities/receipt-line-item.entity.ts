@@ -7,14 +7,17 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 import { ReceiptEntity } from './receipt.entity';
 
 @Entity('receipt_line_items')
 export class ReceiptLineItemEntity {
   @PrimaryGeneratedColumn()
+  @Exclude()
   id!: number;
 
   @Column({ name: 'receipt_id', type: 'int' })
+  @Exclude()
   receiptId!: number;
 
   @Column({ name: 'description', type: 'varchar', length: 500 })

@@ -8,7 +8,9 @@ export async function GET(request: NextRequest) {
   try {
     const authHeader = request.headers.get('Authorization');
     const cookieStore = await cookies();
-    const orgUid = cookieStore.get(ORG_HEADER)?.value;
+    const orgUidFromCookie = cookieStore.get(ORG_HEADER)?.value;
+    const orgUidFromHeader = request.headers.get(ORG_HEADER);
+    const orgUid = orgUidFromHeader || orgUidFromCookie;
 
     const headers: HeadersInit = {
       'Content-Type': 'application/json',

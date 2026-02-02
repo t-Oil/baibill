@@ -8,7 +8,6 @@ export class CreateUsersTable1729160000006 implements MigrationInterface {
   name = 'CreateUsersTable1729160000006';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Enable UUID extension if not already enabled (for PostgreSQL)
     await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
 
     await queryRunner.createTable(
@@ -85,7 +84,6 @@ export class CreateUsersTable1729160000006 implements MigrationInterface {
       true,
     );
 
-    // Create foreign key to departments table
     await queryRunner.createForeignKey(
       'users',
       new TableForeignKey({
@@ -96,7 +94,6 @@ export class CreateUsersTable1729160000006 implements MigrationInterface {
       }),
     );
 
-    // Create indexes
     await queryRunner.query(`
       CREATE UNIQUE INDEX "IDX_users_uid" ON "users" ("uid")
     `);

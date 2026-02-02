@@ -105,9 +105,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     <div className="min-h-screen bg-[var(--bg)] transition-colors duration-200">
       {/* Sidebar for desktop */}
       <aside
-        className={`fixed top-0 left-0 z-40 h-screen transition-all duration-300 ${
-          sidebarOpen ? 'w-64' : 'w-20'
-        } hidden md:block`}
+        className={`fixed top-0 left-0 z-40 h-screen transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-20'
+          } hidden md:block`}
       >
         <div className="h-full px-3 py-4 bg-[var(--surface)] border-r border-[var(--border)] flex flex-col transition-colors duration-200">
           {/* Logo */}
@@ -132,11 +131,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center px-3 py-3 rounded-lg transition-all ${
-                  isActive(item.href)
-                    ? 'bg-[var(--button-primary)]/10 text-[var(--button-primary)] border border-[var(--button-primary)]/20'
-                    : 'text-[var(--muted)] hover:bg-[var(--bg)] hover:text-[var(--text)]'
-                }`}
+                className={`flex items-center px-3 py-3 rounded-lg transition-all ${isActive(item.href)
+                  ? 'bg-[var(--button-primary)]/10 text-[var(--button-primary)] border border-[var(--button-primary)]/20'
+                  : 'text-[var(--muted)] hover:bg-[var(--bg)] hover:text-[var(--text)]'
+                  }`}
               >
                 <span className={sidebarOpen ? 'mr-3' : 'mx-auto'}>{item.icon}</span>
                 {sidebarOpen && <span className="font-medium">{item.name}</span>}
@@ -200,11 +198,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     key={item.name}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center px-3 py-3 rounded-lg transition-all ${
-                      isActive(item.href)
-                        ? 'bg-[var(--button-primary)]/10 text-[var(--button-primary)] border border-[var(--button-primary)]/20'
-                        : 'text-[var(--muted)] hover:bg-[var(--bg)] hover:text-[var(--text)]'
-                    }`}
+                    className={`flex items-center px-3 py-3 rounded-lg transition-all ${isActive(item.href)
+                      ? 'bg-[var(--button-primary)]/10 text-[var(--button-primary)] border border-[var(--button-primary)]/20'
+                      : 'text-[var(--muted)] hover:bg-[var(--bg)] hover:text-[var(--text)]'
+                      }`}
                   >
                     <span className="mr-3">{item.icon}</span>
                     <span className="font-medium">{item.name}</span>
@@ -284,8 +281,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                       <div className="px-4 py-3 border-b border-[var(--border)]">
                         <p className="text-sm font-medium text-[var(--text)]">
                           {user?.firstName} {user?.lastName}
+                          <span className="text-sm font-light text-[var(--muted)]">
+                            &nbsp;({user?.plan?.displayName} plan)
+                          </span>
                         </p>
-                        <p className="text-xs text-[var(--muted)] truncate">{user?.email}</p>
+                        <p className="t ext-xs text-[var(--muted)] truncate">{user?.email}</p>
                       </div>
 
                       {/* Sign out button */}

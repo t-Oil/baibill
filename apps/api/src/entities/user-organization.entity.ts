@@ -6,6 +6,7 @@ import {
   JoinColumn,
   CreateDateColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 import { ActiveStatusEnum } from '@commons/enums/active-status.enum';
 import { UserEntity } from './user.entity';
 import { OrganizationEntity } from './organization.entity';
@@ -18,18 +19,23 @@ import { OrganizationRoleEntity } from './organization-role.entity';
 @Entity('user_organizations')
 export class UserOrganizationEntity {
   @PrimaryGeneratedColumn()
+  @Exclude()
   id!: number;
 
   @Column({ name: 'user_id' })
+  @Exclude()
   userId: number;
 
   @Column({ name: 'organization_id' })
+  @Exclude()
   organizationId: number;
 
   @Column({ name: 'role_id' })
+  @Exclude()
   roleId: number;
 
   @Column({ name: 'invited_by', nullable: true })
+  @Exclude()
   invitedBy?: number;
 
   @ManyToOne(() => UserEntity)
@@ -53,9 +59,9 @@ export class UserOrganizationEntity {
 
   @Column({
     name: 'is_active',
-    type: 'enum',
-    enum: ActiveStatusEnum,
+    type: 'smallint',
     default: ActiveStatusEnum.ACTIVE,
   })
+  @Exclude()
   isActive!: ActiveStatusEnum;
 }

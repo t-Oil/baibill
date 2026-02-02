@@ -134,13 +134,11 @@ export class AiService implements OnModuleInit {
 
       const parsed = JSON.parse(content) as AIReceiptResult;
 
-      // Validate result has required structure
       if (typeof parsed !== 'object' || !('confidence' in parsed)) {
         this.logger.warn('AI response missing confidence field');
         return { result: null, metadata };
       }
 
-      // If confidence is low, return null to avoid using unreliable data
       if (parsed.confidence === 'low') {
         this.logger.log('AI confidence too low, discarding result');
         return { result: null, metadata };

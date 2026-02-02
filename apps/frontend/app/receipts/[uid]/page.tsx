@@ -6,6 +6,7 @@ import Link from 'next/link';
 import DashboardLayout from '@/components/DashboardLayout';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { apiGet } from '@/lib/api';
 
 interface LineItem {
   id: number;
@@ -48,12 +49,7 @@ export default function ReceiptDetailPage() {
 
   const fetchReceipt = async (uid: string) => {
     try {
-      const token = localStorage.getItem('accessToken');
-      const response = await fetch(`/api/receipts/${uid}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await apiGet(`/api/receipts/${uid}`);
       const data = await response.json();
 
       if (data.status.code === 200) {

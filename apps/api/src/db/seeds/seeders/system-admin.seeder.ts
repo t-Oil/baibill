@@ -11,7 +11,6 @@ export default class SystemAdminSeeder implements Seeder {
     const userRepository = dataSource.getRepository(UserEntity);
     const roleRepository = dataSource.getRepository(RoleEntity);
 
-    // Check if admin user already exists
     const existingAdmin = await userRepository.findOne({
       where: { email: 'admin@example.com' },
     });
@@ -20,7 +19,6 @@ export default class SystemAdminSeeder implements Seeder {
       return await userRepository.find();
     }
 
-    // Get the admin role
     const adminRole = await roleRepository.findOne({
       where: { name: 'admin' },
     });
@@ -30,14 +28,12 @@ export default class SystemAdminSeeder implements Seeder {
       return [];
     }
 
-    // Check if system user already exists
     const existingSystem = await userRepository.findOne({
       where: { email: 'system@mock.com' },
     });
 
     const users = [];
 
-    // Only create system user if it doesn't exist
     if (!existingSystem) {
       users.push({
         uid: uuidv4(),
@@ -53,7 +49,6 @@ export default class SystemAdminSeeder implements Seeder {
       });
     }
 
-    // Always create the new admin user
     users.push({
       uid: uuidv4(),
       email: 'admin@example.com',

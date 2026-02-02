@@ -23,6 +23,7 @@
     "migration:generate": "npm run typeorm -- migration:generate -d src/configs/typeorm/data-source.ts",
     "migration:create": "npm run typeorm -- migration:create",
     "migration:run": "npm run typeorm -- migration:run -d src/configs/typeorm/data-source.ts",
+    "migration:run:standalone": "ts-node -r tsconfig-paths/register src/db/run-migrations.ts",
     "migration:revert": "npm run typeorm -- migration:revert -d src/configs/typeorm/data-source.ts",
     "migration:show": "npm run typeorm -- migration:show -d src/configs/typeorm/data-source.ts",
     "schema:drop": "npm run typeorm -- schema:drop -d src/configs/typeorm/data-source.ts",

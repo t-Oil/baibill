@@ -69,7 +69,6 @@ export class CreatePermissionsTable1729160000003 implements MigrationInterface {
       true,
     );
 
-    // Create foreign key to menus table
     await queryRunner.createForeignKey(
       'permissions',
       new TableForeignKey({
@@ -80,7 +79,6 @@ export class CreatePermissionsTable1729160000003 implements MigrationInterface {
       }),
     );
 
-    // Create indexes
     await queryRunner.query(`
       CREATE INDEX "IDX_permissions_uid" ON "permissions" ("uid")
     `);

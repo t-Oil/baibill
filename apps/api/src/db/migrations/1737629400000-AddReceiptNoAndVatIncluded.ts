@@ -2,7 +2,6 @@ import { QueryRunner, TableColumn } from 'typeorm';
 
 export class AddReceiptNoAndVatIncluded1737629400000 {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Add receipt_no column
     await queryRunner.addColumn(
       'receipts',
       new TableColumn({
@@ -13,7 +12,6 @@ export class AddReceiptNoAndVatIncluded1737629400000 {
       }),
     );
 
-    // Add vat_included column
     await queryRunner.addColumn(
       'receipts',
       new TableColumn({

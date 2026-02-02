@@ -5,6 +5,8 @@ import { UserOrganizationRepository } from '@repositories/user-organization.repo
 import { OrganizationRoleRepository } from '@repositories/organization-role.repository';
 import { OrganizationInvitationRepository } from '@repositories/organization-invitation.repository';
 import { UserRepository } from '@repositories/user.repository';
+import { UserSubscriptionRepository } from '@repositories/user-subscription.repository';
+import { PlanRepository } from '@repositories/plan.repository';
 import { OrganizationEntity } from '@entities/organization.entity';
 import { UserOrganizationEntity } from '@entities/user-organization.entity';
 import {
@@ -12,6 +14,7 @@ import {
   InvitationStatus,
 } from '@entities/organization-invitation.entity';
 import { OrganizationException } from '@exceptions/app/organization.exception';
+import { UserException } from '@exceptions/app/user.exception';
 import { ActiveStatusEnum } from '@commons/enums/active-status.enum';
 import { MailService } from '@modules/mail/mail.service';
 import { ConfigService } from '@nestjs/config';
@@ -35,6 +38,8 @@ export class OrganizationService {
     private readonly invitationRepository: OrganizationInvitationRepository,
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
+    private readonly userSubscriptionRepository: UserSubscriptionRepository,
+    private readonly planRepository: PlanRepository,
     private readonly eventEmitter: EventEmitter2,
     private readonly configService: ConfigService,
   ) {}
@@ -47,6 +52,28 @@ export class OrganizationService {
    * @returns Created organization
    */
   async create(name: string, userId: number, description?: string): Promise<OrganizationEntity> {
+    const subscription = await this.userSubscriptionRepository.findActiveByUserId(userId);
+    
+    let canCreateOrg = false;
+    let planName = 'Free';
+    
+    if (subscription?.plan) {
+      canCreateOrg = subscription.plan.canCreateOrg;
+      planName = subscription.plan.displayName;
+    } else {
+      const defaultPlan = await this.planRepository.findDefault();
+      if (defaultPlan) {
+        canCreateOrg = defaultPlan.canCreateOrg;
+        planName = defaultPlan.displayName;
+      }
+    }
+    
+    if (!canCreateOrg) {
+      UserException.cannotCreateOrganization([
+        `Your ${planName} plan does not allow creating organizations. Please upgrade.`,
+      ]);
+    }
+
     const organization = this.organizationRepository.create({
       name,
       description,
@@ -201,7 +228,6 @@ export class OrganizationService {
         OrganizationException.alreadyMember(['User is already a member of this organization']);
       }
 
-      // Check for pending invitation by userId
       const existingInvite = await this.invitationRepository.findOne({
         where: {
           organizationId,
@@ -399,7 +425,6 @@ export class OrganizationService {
       OrganizationException.memberNotFound(['Member not found']);
     }
 
-    // Check if target role is 'owner'
     const newRole = await this.roleRepository.findOne({ where: { id: roleId } });
     if (!newRole) {
       OrganizationException.createError(['Role not found']);
@@ -410,7 +435,6 @@ export class OrganizationService {
         OrganizationException.createError(['Requester ID required for ownership update']);
       }
 
-      // Verify requester is current owner
       const isRequesterOwner = await this.hasRole(requesterId, organizationId, 'owner');
       if (!isRequesterOwner) {
         OrganizationException.createError(['Only the current owner can transfer ownership']);
@@ -529,7 +553,6 @@ export class OrganizationService {
       OrganizationException.invitationNotFound(['Invitation not found']);
     }
 
-    // Reset expiration to 30 days from now
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 30);
     invitation.expiresAt = expiresAt;

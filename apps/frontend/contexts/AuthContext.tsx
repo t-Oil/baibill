@@ -3,11 +3,21 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 
+interface Plan {
+  uid: string;
+  name: string;
+  displayName: string;
+  uploadLimit: number;
+  canCreateOrg: boolean;
+  maxOrganizations: number;
+}
+
 interface User {
   uid: string;
   email: string;
   firstName: string;
   lastName: string;
+  plan?: Plan;
   role: {
     name: string;
     permissions: string[];

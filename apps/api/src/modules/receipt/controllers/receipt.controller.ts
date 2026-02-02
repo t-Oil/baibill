@@ -133,6 +133,25 @@ export class ReceiptController {
   }
 
   /**
+   * Gets upload count for the current user.
+   * @param req Request object for user info
+   * @returns Upload count
+   */
+  @Get('upload/count')
+  async getUploadCount(@Req() req: any): Promise<ApiResource> {
+    try {
+      const userId = req?.user?.id;
+      if (!userId) {
+        return ApiResource.errorResponse(new Error('User not authenticated'));
+      }
+      const count = await this.receiptService.getUserUploadCount(userId);
+      return ApiResource.successResponse({ count });
+    } catch (error) {
+      return ApiResource.errorResponse(error);
+    }
+  }
+
+  /**
    * Gets a receipt by UID.
    * @param uid Receipt unique identifier
    * @returns Receipt details

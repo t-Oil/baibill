@@ -30,6 +30,43 @@ services:
       - SETGID
       - DAC_OVERRIDE
 
+  # Database Migrations (runs once before API starts)
+  migrations:
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile.migrations
+      args:
+        NODE_ENV: production
+    container_name: receipt-ocr-migrations
+    environment:
+      NODE_ENV: production
+      # TypeORM Database Configuration
+      DB_CONNECTION: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DATABASE_NAME}
+      DB_USERNAME: ${DATABASE_USER}
+      DB_PASSWORD: ${DATABASE_PASSWORD}
+      DB_DEBUG: false
+      DB_SSL: false
+      # Legacy DATABASE_* variables (for compatibility)
+      DATABASE_TYPE: postgres
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - receipt-ocr-network
+    restart: "no"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
   # NestJS API
   api:
     build:
@@ -53,7 +90,6 @@ services:
       DB_PASSWORD: ${DATABASE_PASSWORD}
       DB_DEBUG: false
       DB_SSL: false
-      DB_AUTO_MIGRATE: true
       # Legacy DATABASE_* variables (for compatibility)
       DATABASE_TYPE: postgres
       DATABASE_HOST: postgres
@@ -89,6 +125,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
     networks:
       - receipt-ocr-network
     healthcheck:

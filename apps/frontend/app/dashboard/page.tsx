@@ -5,7 +5,9 @@ import Link from 'next/link';
 import DashboardLayout from '@/components/DashboardLayout';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { useOrganization } from '@/contexts/OrganizationContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { apiGet } from '@/lib/api';
 
 interface ReceiptStats {
   total: number;
@@ -18,6 +20,7 @@ interface ReceiptStats {
 
 export default function DashboardPage() {
   const { currentOrg, isLoading: isOrgLoading } = useOrganization();
+  const { user } = useAuth();
   const [stats, setStats] = useState<ReceiptStats>({
     total: 0,
     today: 0,
@@ -32,14 +35,9 @@ export default function DashboardPage() {
   const fetchDashboardData = useCallback(async () => {
     if (!currentOrg) return;
 
-    const token = localStorage.getItem('accessToken');
-    if (!token) return;
-
     setIsLoading(true);
     try {
-      const statsResponse = await fetch('/api/receipts/stats/summary', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const statsResponse = await apiGet('/api/receipts/stats/summary');
       if (statsResponse.status === 401) {
         // Handle auth error if needed
         return;
@@ -50,9 +48,7 @@ export default function DashboardPage() {
         setStats(statsData.data);
       }
 
-      const receiptsResponse = await fetch('/api/receipts?page=1&limit=5', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const receiptsResponse = await apiGet('/api/receipts?page=1&limit=5');
       const receiptsData = await receiptsResponse.json();
 
       if (receiptsData.status.code === 200) {
@@ -104,10 +100,27 @@ export default function DashboardPage() {
         <div className="space-y-6">
           {/* Page header */}
           <div>
-            <h1 className="text-3xl font-bold text-[var(--text)]">Dashboard</h1>
-            <p className="mt-2 text-[var(--muted)]">
-              Welcome back! Here's an overview of your receipts.
-            </p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold text-[var(--text)]">Dashboard</h1>
+                <p className="mt-2 text-[var(--muted)]">
+                  Welcome back! Here's an overview of your receipts.
+                </p>
+              </div>
+              {user?.plan && (
+                <div className="flex items-center space-x-2">
+                  <span
+                    className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      user.plan.name !== 'free'
+                        ? 'bg-[var(--button-primary)]/10 text-[var(--button-primary)]'
+                        : 'bg-[var(--muted)]/20 text-[var(--muted)]'
+                    }`}
+                  >
+                    {user.plan.displayName?.toUpperCase() || 'FREE'}
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Stats grid */}

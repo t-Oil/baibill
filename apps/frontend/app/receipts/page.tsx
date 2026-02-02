@@ -6,6 +6,7 @@ import DashboardLayout from '@/components/DashboardLayout';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { useOrganization } from '@/contexts/OrganizationContext';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { apiFetch } from '@/lib/api';
 
 interface Receipt {
   uid: string;
@@ -39,7 +40,6 @@ export default function ReceiptsPage() {
   const fetchReceipts = async () => {
     setIsLoading(true);
     try {
-      const token = localStorage.getItem('accessToken');
       const params = new URLSearchParams({
         page: currentPage.toString(),
         limit: itemsPerPage.toString(),
@@ -49,14 +49,7 @@ export default function ReceiptsPage() {
         params.append('search', searchQuery);
       }
 
-      const headers: HeadersInit = {
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        ...(currentOrg?.uid ? { 'x-organization-id': currentOrg.uid } : {}),
-      };
-
-      const response = await fetch(`/api/receipts?${params.toString()}`, {
-        headers,
-      });
+      const response = await apiFetch(`/api/receipts?${params.toString()}`);
       const data = await response.json();
 
       if (data.status.code === 200) {
@@ -77,7 +70,6 @@ export default function ReceiptsPage() {
    */
   const handleExport = async (format: 'csv' | 'excel') => {
     try {
-      const token = localStorage.getItem('accessToken');
       const params = new URLSearchParams();
 
       if (searchQuery) {
@@ -86,14 +78,7 @@ export default function ReceiptsPage() {
 
       params.append('format', format);
 
-      const headers: HeadersInit = {
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        ...(currentOrg?.uid ? { 'x-organization-id': currentOrg.uid } : {}),
-      };
-
-      const response = await fetch(`/api/receipts/export?${params.toString()}`, {
-        headers,
-      });
+      const response = await apiFetch(`/api/receipts/export?${params.toString()}`);
 
       if (response.ok) {
         const blob = await response.blob();

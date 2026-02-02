@@ -10,6 +10,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 import { v4 as uuidv4 } from 'uuid';
 import { ActiveStatusEnum } from '@commons/enums/active-status.enum';
 import { ReceiptLineItemEntity } from './receipt-line-item.entity';
@@ -18,7 +19,13 @@ import { UserEntity } from './user.entity';
 
 @Entity('receipts')
 export class ReceiptEntity {
+  /**
+   * Internal database ID - excluded from API responses.
+   * Use `uid` for public-facing APIs.
+   * Available internally for queries and business logic.
+   */
   @PrimaryGeneratedColumn()
+  @Exclude()
   id!: number;
 
   @Column({ type: 'uuid', unique: true })
@@ -71,8 +78,7 @@ export class ReceiptEntity {
 
   @Column({
     name: 'is_active',
-    type: 'enum',
-    enum: ActiveStatusEnum,
+    type: 'smallint',
     default: ActiveStatusEnum.ACTIVE,
   })
   isActive!: ActiveStatusEnum;
@@ -83,10 +89,20 @@ export class ReceiptEntity {
   })
   lineItems?: ReceiptLineItemEntity[];
 
+  /**
+   * Internal foreign key - excluded from API responses.
+   * Available internally for queries and joins.
+   */
   @Column({ name: 'organization_id', nullable: true })
+  @Exclude()
   organizationId?: number;
 
+  /**
+   * Internal foreign key - excluded from API responses.
+   * Available internally for queries and joins.
+   */
   @Column({ name: 'uploaded_by', nullable: true })
+  @Exclude()
   uploadedById?: number;
 
   @ManyToOne(() => OrganizationEntity)

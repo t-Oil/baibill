@@ -13,6 +13,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 import { MsDepartmentEntity } from './ms-department.entity';
 import { ActiveStatusEnum } from '@commons/enums/active-status.enum';
 import { v4 as uuidv4 } from 'uuid';
@@ -22,6 +23,7 @@ import { UserOrganizationEntity } from './user-organization.entity';
 @Entity('users')
 export class UserEntity {
   @PrimaryGeneratedColumn()
+  @Exclude()
   id!: number;
 
   @Column({ type: 'uuid', unique: true })
@@ -31,21 +33,25 @@ export class UserEntity {
   email: string;
 
   @Column({ type: 'varchar' })
+  @Exclude()
   password: string;
 
   @Column({ name: 'first_name', length: 100 })
   firstName: string;
 
   @Column({ name: 'confirmation_token', type: 'varchar', nullable: true })
+  @Exclude()
   confirmationToken?: string;
 
   @Column({ name: 'confirmation_token_expires', type: 'timestamp', nullable: true })
+  @Exclude()
   confirmationTokenExpires?: Date;
 
   @Column({ name: 'last_name', length: 100 })
   lastName: string;
 
   @Column({ name: 'department_id', type: 'int', nullable: true })
+  @Exclude()
   departmentId?: number;
 
   @ManyToOne(() => MsDepartmentEntity)
@@ -56,20 +62,22 @@ export class UserEntity {
   createdAt!: Date;
 
   @Column({ name: 'updated_by', nullable: true })
+  @Exclude()
   updatedById!: number;
 
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
   updatedAt!: Date;
 
   @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp', nullable: true })
+  @Exclude()
   deletedAt!: Date;
 
   @Column({
     name: 'is_active',
-    type: 'enum',
-    enum: ActiveStatusEnum,
+    type: 'smallint',
     default: ActiveStatusEnum.ACTIVE,
   })
+  @Exclude()
   isActive!: ActiveStatusEnum;
 
   @ManyToMany(() => RoleEntity, {

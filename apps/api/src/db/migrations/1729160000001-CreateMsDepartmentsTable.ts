@@ -8,7 +8,6 @@ export class CreateMsDepartmentsTable1729160000001 implements MigrationInterface
   name = 'CreateMsDepartmentsTable1729160000001';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Enable UUID extension for PostgreSQL
     await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
 
     await queryRunner.query(`
@@ -72,7 +71,6 @@ export class CreateMsDepartmentsTable1729160000001 implements MigrationInterface
       true,
     );
 
-    // Create index for uid
     await queryRunner.query(`
       CREATE INDEX "IDX_ms_departments_uid" ON "ms_departments" ("uid")
     `);

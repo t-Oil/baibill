@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const Mailjet = require('node-mailjet');
 import { EmailTemplateRepository } from '@repositories/email-template.repository';
 import { EmailTemplateType } from '@entities/email-template.entity';

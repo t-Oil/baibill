@@ -1,5 +1,6 @@
 import { HttpStatus, Injectable, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IsNull } from 'typeorm';
 import { ReceiptRepository } from '@repositories/receipt.repository';
 import { ReceiptEntity } from '@entities/receipt.entity';
 import { ReceiptLineItemEntity } from '@entities/receipt-line-item.entity';
@@ -11,6 +12,9 @@ import { AiService } from '@modules/ai/ai.service';
 import { Logger } from '@modules/logger/services/logger.service';
 import { OrganizationRepository } from '@repositories/organization.repository';
 import { UserOrganizationRepository } from '@repositories/user-organization.repository';
+import { UserSubscriptionRepository } from '@repositories/user-subscription.repository';
+import { PlanRepository } from '@repositories/plan.repository';
+import { UserException } from '@exceptions/app/user.exception';
 import { ActiveStatusEnum } from '@commons/enums/active-status.enum';
 
 interface ParsedReceiptData {
@@ -46,6 +50,8 @@ export class ReceiptService {
     private readonly organizationRepository: OrganizationRepository,
     @InjectRepository(UserOrganizationRepository)
     private readonly userOrganizationRepository: UserOrganizationRepository,
+    private readonly userSubscriptionRepository: UserSubscriptionRepository,
+    private readonly planRepository: PlanRepository,
   ) {
     this.parser = new ReceiptParser();
   }
@@ -100,19 +106,39 @@ export class ReceiptService {
     uploadedById?: number,
   ): Promise<ReceiptEntity> {
     try {
-      // Resolve org UID to numeric ID
       const organizationId = await this.resolveOrgId(orgUid);
 
-      // 1. Extract text from image
+      if (uploadedById) {
+        const uploadCount = await this.getUserUploadCount(uploadedById);
+        const subscription = await this.userSubscriptionRepository.findActiveByUserId(uploadedById);
+        
+        let uploadLimit = 3; // default free plan limit
+        let planName = 'Free';
+        
+        if (subscription?.plan) {
+          uploadLimit = subscription.plan.uploadLimit;
+          planName = subscription.plan.displayName;
+        } else {
+          const defaultPlan = await this.planRepository.findDefault();
+          if (defaultPlan) {
+            uploadLimit = defaultPlan.uploadLimit;
+            planName = defaultPlan.displayName;
+          }
+        }
+        
+        if (uploadLimit !== -1 && uploadCount >= uploadLimit) {
+          UserException.uploadLimitReached([
+            `Upload limit of ${uploadLimit} receipts reached on ${planName} plan. Upgrade for more uploads.`,
+          ]);
+        }
+      }
+
       const ocrText = await this.extractText(file.buffer);
 
-      // 2. Parse receipt data (AI or regex)
       const { parsed, parsingMethod } = await this.parseReceiptData(ocrText);
 
-      // 3. Check for duplicate receipt within the same organization
       await this.checkDuplicate(parsed.receiptNo, organizationId);
 
-      // 4. Create and save receipt entity
       const saved = await this.createAndSaveReceipt(
         parsed,
         ocrText,
@@ -172,7 +198,6 @@ export class ReceiptService {
       };
     }
 
-    // Fallback to regex if AI fails
     this.logger.log('AI parsing returned null or invalid, falling back to regex parser');
     return {
       parsed: this.parseWithRegex(ocrText),
@@ -284,7 +309,6 @@ export class ReceiptService {
       uploadedById,
     });
 
-    // Add line items if available
     if (parsed.lineItems?.length > 0) {
       receipt.lineItems = this.createLineItems(parsed.lineItems);
     }
@@ -311,7 +335,6 @@ export class ReceiptService {
    * Handle errors during processing
    */
   private handleProcessError(error: any): never {
-    // Rethrow ApiException as-is (includes ReceiptException errors like duplicate)
     if (
       error.name === 'ApiException' ||
       error.constructor?.name === 'ApiException' ||
@@ -321,7 +344,6 @@ export class ReceiptService {
       throw error;
     }
 
-    // Wrap other errors with generic message using ApiException
     throw new ApiException(
       200002,
       [`Failed to process receipt: ${error.message}`],
@@ -435,12 +457,10 @@ export class ReceiptService {
 
       const receipts = await queryBuilder.getMany();
 
-      // Create workbook
       const Workbook = require('exceljs').Workbook;
       const workbook = new Workbook();
       const worksheet = workbook.addWorksheet('Receipts');
 
-      // Define columns
       worksheet.columns = [
         { header: 'Date', key: 'date', width: 15 },
         { header: 'Merchant', key: 'merchantName', width: 25 },
@@ -453,7 +473,6 @@ export class ReceiptService {
         { header: 'Created At', key: 'createdAt', width: 20 },
       ];
 
-      // Add rows
       receipts.forEach((receipt) => {
         worksheet.addRow({
           date: receipt.date,
@@ -505,7 +524,6 @@ export class ReceiptService {
       weekStart.setDate(now.getDate() - 7);
       const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
-      // Helper to apply organization filter
       const applyFilter = (qb: any) => {
         if (organizationId) {
           qb.andWhere('receipt.organization_id = :organizationId', { organizationId });
@@ -513,7 +531,6 @@ export class ReceiptService {
         return qb;
       };
 
-      // Get total count and sum
       const totalQuery = this.receiptRepository
         .createQueryBuilder('receipt')
         .select('COUNT(*)', 'total')
@@ -522,7 +539,6 @@ export class ReceiptService {
       applyFilter(totalQuery);
       const totalResult = await totalQuery.getRawOne();
 
-      // Get today's count
       const todayQuery = this.receiptRepository
         .createQueryBuilder('receipt')
         .where('receipt.date >= :todayStart', { todayStart });
@@ -530,7 +546,6 @@ export class ReceiptService {
       applyFilter(todayQuery);
       const todayCount = await todayQuery.getCount();
 
-      // Get this week's count
       const weekQuery = this.receiptRepository
         .createQueryBuilder('receipt')
         .where('receipt.date >= :weekStart', { weekStart });
@@ -538,7 +553,6 @@ export class ReceiptService {
       applyFilter(weekQuery);
       const weekCount = await weekQuery.getCount();
 
-      // Get this month's count
       const monthQuery = this.receiptRepository
         .createQueryBuilder('receipt')
         .where('receipt.date >= :monthStart', { monthStart });
@@ -561,5 +575,20 @@ export class ReceiptService {
     } catch (error) {
       throw ReceiptException.createError([`Failed to fetch stats: ${error.message}`]);
     }
+  }
+
+  /**
+   * Gets upload count for a user.
+   * @param userId User ID
+   * @returns Upload count
+   */
+  async getUserUploadCount(userId: number): Promise<number> {
+    return await this.receiptRepository.count({
+      where: {
+        uploadedById: userId,
+        isActive: ActiveStatusEnum.ACTIVE,
+        deletedAt: IsNull(),
+      },
+    });
   }
 }

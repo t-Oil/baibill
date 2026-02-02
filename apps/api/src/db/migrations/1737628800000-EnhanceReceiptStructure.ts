@@ -2,7 +2,6 @@ import { QueryRunner, Table, TableColumn, TableForeignKey } from 'typeorm';
 
 export class EnhanceReceiptStructure1737628800000 {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Add new columns to receipts table
     await queryRunner.addColumns('receipts', [
       new TableColumn({
         name: 'company_tax_id',
@@ -37,7 +36,6 @@ export class EnhanceReceiptStructure1737628800000 {
       }),
     ]);
 
-    // Create receipt_line_items table
     await queryRunner.createTable(
       new Table({
         name: 'receipt_line_items',
@@ -98,7 +96,6 @@ export class EnhanceReceiptStructure1737628800000 {
       true,
     );
 
-    // Add foreign key constraint
     await queryRunner.createForeignKey(
       'receipt_line_items',
       new TableForeignKey({
@@ -110,23 +107,18 @@ export class EnhanceReceiptStructure1737628800000 {
       }),
     );
 
-    // Add index for receipt_id
     await queryRunner.query(
       `CREATE INDEX "IDX_receipt_line_items_receipt_id" ON "receipt_line_items" ("receipt_id")`,
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    // Drop foreign key
     await queryRunner.dropForeignKey('receipt_line_items', 'FK_receipt_line_items_receipt_id');
 
-    // Drop index
     await queryRunner.query(`DROP INDEX "IDX_receipt_line_items_receipt_id"`);
 
-    // Drop table
     await queryRunner.dropTable('receipt_line_items');
 
-    // Remove columns from receipts table
     await queryRunner.dropColumns('receipts', [
       'company_tax_id',
       'company_address',

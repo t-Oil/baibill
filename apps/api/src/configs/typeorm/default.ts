@@ -10,7 +10,6 @@ class TypeOrmConfigService implements TypeOrmOptionsFactory {
     const isTesting = this.configService.get<string>('mode') === 'test';
     const isDevelopment = this.configService.get<string>('mode') === 'develop';
 
-    // Check if automatic migrations should run (Docker deployment)
     const autoMigrate = this.configService.get<boolean>('database.autoMigrate') === true;
 
     let defaultOptions: TypeOrmModuleOptions & SeederOptions = {
@@ -21,9 +20,6 @@ class TypeOrmConfigService implements TypeOrmOptionsFactory {
       password: this.configService.get<string>('database.password'),
       database: this.configService.get<string>('database.name'),
       entities: [__dirname + '/../../entities/*.entity{.ts,.js}'],
-      // Migrations configuration
-      // For Docker: migrations run automatically when DB_AUTO_MIGRATE=true
-      // For local dev: run manually via CLI: npm run migration:run
       migrations: autoMigrate ? [__dirname + '/../../db/migrations/*{.ts,.js}'] : [],
       migrationsTableName: 'migrations',
       migrationsRun: autoMigrate,
@@ -32,7 +28,6 @@ class TypeOrmConfigService implements TypeOrmOptionsFactory {
       factories: ['src/db/seeds/factories/**/*{.ts,.js}'],
       logging: isDevelopment && this.configService.get<boolean>('database.debug'),
 
-      // SSL configuration
       ssl: this.configService.get<boolean>('database.ssl') ? { rejectUnauthorized: false } : false,
     };
 

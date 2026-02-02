@@ -32,7 +32,6 @@ export class ApiResource {
    * @param error
    */
   static errorResponse(error: Error): ErrorResponseInterface {
-    // All exception will be handle by exception filters
     throw error;
   }
 }
